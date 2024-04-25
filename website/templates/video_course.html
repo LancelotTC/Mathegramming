@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %} Course name {% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/course.css">
+{% endblock %}
+
+{% block content %}
+
+<div id="inner-container">
+	<div class="game-container">
+		<iframe width="560" height="315" class="game" src="https://www.youtube.com/embed/4xCqDzEgjo4"
+			title="YouTube video player" frameborder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			allowfullscreen></iframe>
+	</div>
+</div>
+
+<div class="side-container">
+	<h1>This is a video course</h1>
+	<p>This is a video course about integers. This is the first video of the series</p>
+
+
+	<div class="teacher-help" style="display: flex; flex-direction: column; row-gap: 1ch;">
+		<p>Teachers: {{ teachers.count() }}</p>
+		{% for teacher in teachers %}
+			<button type="button" style="color: var(--text-bg-inv);">{{teacher.first_name}} {{teacher.last_name}}</button>
+		{% endfor %}
+	</div>
+</div>
+
+
+{% endblock %}

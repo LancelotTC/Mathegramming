@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block title %}Forum{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/forum.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{url_for('static', filename='script/forum.js')}}"></script>
+<script>
+	// radios = document.querySelectorAll("input[type='radio']")
+
+	// radios.forEach(radio => {
+	// if (radio.value == "{{filter[]}}")
+	// })
+	$(document).ready(function () {
+		$('input[type=radio][value="{{filter["date"][1]}}"]').prop("checked", true);
+		$('input[type=radio][value="{{filter["subject"][1]}}"]').prop("checked", true);
+		$('input[type=radio][value="{{filter["category"][1]}}"]').prop("checked", true);
+	});
+
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div id="filter-container">
+	<h1>Filter</h1>
+	<div class="filter-content">
+		<h2>By date</h2>
+		<div>
+			<label class="container">All time
+				<input type="radio" name="by-date" value="date-all" checked>
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Past hour
+				<input type="radio" name="by-date" value="date-hour">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Past 24h
+				<input type="radio" name="by-date" value="date-day">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Past week
+				<input type="radio" name="by-date" value="date-week">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Past month
+				<input type="radio" name="by-date" value="date-month">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Past year
+				<input type="radio" name="by-date" value="date-year">
+				<span class="checkmark"></span>
+			</label>
+		</div>
+	</div>
+	<div class="filter-content">
+		<h2>By subject</h2>
+		<div>
+			<label class="container">All
+				<input type="radio" name="by-subject" value="subject-all" checked>
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Mathematics
+				<input type="radio" name="by-subject" value="subject-mathematics">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Physics
+				<input type="radio" name="by-subject" value="subject-physics">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Programming
+				<input type="radio" name="by-subject" value="subject-programming">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Other
+				<input type="radio" name="by-subject" value="subject-other">
+				<span class="checkmark"></span>
+			</label>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="fixed-shadow"></div>
+<div id="inner-container">
+	<div class="upper-container">
+		<form id="search-container" method="POST" action="{{ url_for('views.forum')}}">
+			<a href="{{url_for('views.create_post')}}">
+				<button id="create-post" class="search-container-buttons hover-style" type="button">Create post</button>
+			</a>
+			<input type="text" placeholder="Search posts" name="search_query" id="search_query"
+				value="{{search_query}}">
+			<a>
+				<button id="search-post" class="search-container-buttons hover-style" type="submit">Search</button>
+			</a>
+		</form>
+		<div class="filter-details">
+			<details class="details">
+				<summary class="summary">Filter by</summary>
+				<div class="filter-detail">
+					<h1>Filter</h1>
+					<div class="filter-content">
+						<h2>By date</h2>
+						<form method="POST">
+							<label class="container">All time
+								<input type="radio" class="detail-radio" name="by-date" value="date-all" checked>
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Past hour
+								<input type="radio" class="detail-radio" name="by-date" value="date-hour">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Past 24h
+								<input type="radio" class="detail-radio" name="by-date" value="date-day">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Past week
+								<input type="radio" class="detail-radio" name="by-date" value="date-week">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Past month
+								<input type="radio" class="detail-radio" name="by-date" value="date-month">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Past year
+								<input type="radio" class="detail-radio" name="by-date" value="date-year">
+								<span class="checkmark"></span>
+							</label>
+						</form>
+					</div>
+					<div class="filter-content">
+						<h2>By subject</h2>
+						<form method="POST">
+							<label class="container">All
+								<input type="radio" class="detail-radio" name="by-subject" value="subject-all" checked>
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Mathematics
+								<input type="radio" class="detail-radio" name="by-subject" value="subject-mathematics">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Physics
+								<input type="radio" class="detail-radio" name="by-subject" value="subject-physics">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Physics
+								<input type="radio" class="detail-radio" name="by-subject" value="subject-programming">
+								<span class="checkmark"></span>
+							</label>
+						</form>
+					</div>
+				</div>
+			</details>
+
+			<details class="details">
+				<summary class="summary">Categories</summary>
+				<div class="filter-detail">
+					<h1>Categories</h1>
+					<div class="filter-content">
+						<div>
+							<label class="container">All
+								<input type="radio" class="detail-radio" name="category" value="category-all"
+									defaultChecked>
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Ask
+								<input type="radio" class="detail-radio" name="category" value="category-ask">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">News
+								<input type="radio" class="detail-radio" name="category" value="category-news">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Discussion
+								<input type="radio" class="detail-radio" name="category" value="category-discussion">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Bug
+								<input type="radio" class="detail-radio" name="category" value="category-bug">
+								<span class="checkmark"></span>
+							</label>
+							<label class="container">Other
+								<input type="radio" class="detail-radio" name="category" value="category-other">
+								<span class="checkmark"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</details>
+		</div>
+	</div>
+	{% for post in posts[::-1] %}
+		{% if now()-post.created <= filter["date"][0] and (post.subject==filter["subject"][0] or filter["subject"][0]=="All"
+			) and (post.category==filter["category"][0] or filter["category"][0]=="All" ) %} <a
+			href="{{ url_for('views.post', post_id=post.id) }}">
+			<button class="post">
+				<div class="title-container">
+					<h3>{{post.title}}</h3>
+					<p>By: {{users.filter_by(id=post.user_id).first().username}}</p>
+				</div>
+				<div class="post-info">
+					<p>Tags: {{post.category.capitalize()}} ({{post.subject.capitalize()}})</p>
+					<div class="post-stats">
+						<p>{{post.score}} like{{"s" if post.score not in (1, -1) else ""}}</p>
+						<p>{{nb_comments[post.id] if nb_comments[post.id] else "0"}} repl{{"y" if nb_comments[post.id] == 1
+							else "ies"}}</p>
+						<p>{{ get_delta(now()-post.created) }} ago</p>
+					</div>
+				</div>
+
+			</button>
+			</a>
+		{% endif %}
+	{% endfor %}
+</div>
+
+<div class="fixed-shadow"></div>
+
+<div class="category-container">
+	<h1>Categories</h1>
+	<div class="filter-content">
+		<div>
+			<label class="container">All
+				<input type="radio" name="category" value="category-all" checked>
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Ask
+				<input type="radio" name="category" value="category-ask">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">News
+				<input type="radio" name="category" value="category-news">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Discussion
+				<input type="radio" name="category" value="category-discussion">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Bug
+				<input type="radio" name="category" value="category-bug">
+				<span class="checkmark"></span>
+			</label>
+			<label class="container">Other
+				<input type="radio" name="category" value="category-other">
+				<span class="checkmark"></span>
+			</label>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

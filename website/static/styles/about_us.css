@@ -1,0 +1,64 @@
+body {
+	border: solid var(--fg) .3rem;
+}
+
+#title {
+	text-align: center;
+	font-size: 2rem;
+}
+
+.section {
+	display: flex;
+	text-align: center;
+	align-items: center;
+	margin-top: 100px;
+	justify-content: space-evenly;
+
+}
+
+.subsection {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+	width: 33%;
+}
+
+.subsection1 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+	width: 33%;
+}
+
+.image-subsection,
+.image-subsection1 {
+	display: flex;
+	width: 400px;
+	height: 300%;
+}
+
+.image {
+	max-width: 100%;
+}
+
+@media (orientation: portrait) {
+	.section {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.subsection,
+	.subsection1 {
+		width: 80%;
+	}
+
+	.subsection1 {
+		order: 1;
+	}
+
+	.image-subsection1 {
+		order: 2;
+	}
+}

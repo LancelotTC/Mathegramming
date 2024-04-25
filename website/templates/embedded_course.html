@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %} Course name {% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/course.css">
+{% endblock %}
+
+{% block content %}
+
+<div id="inner-container">
+	<div class="game-container">
+		<iframe src="https://scratch.mit.edu/projects/813332666/embed" allowtransparency="true" width="485" height="402"
+			frameborder="0" scrolling="no" allowfullscreen></iframe>
+	</div>
+	<div class="controls">
+		<div class="first-line">
+			<button class="control">Pause</button>
+			<button class="control">Previous</button>
+			<button class="control">Next</button>
+		</div>
+		<div class="second-line">
+			<button class="control">Restart course</button>
+			<a href="{{url_for('views.course_finished')}}">
+				<button class="control">Finish course</button>
+			</a>
+			<button class="control">Report a problem</button>
+		</div>
+	</div>
+</div>
+
+<div class="side-container">
+	<h1>This is an embedded course</h1>
+	<p></p>
+
+
+	<div class="teacher-help" style="display: flex; flex-direction: column; row-gap: 1ch;">
+		<p>Teachers: {{ teachers.count() }}</p>
+		{% for teacher in teachers %}
+			<button type="button" style="color: var(--text-bg-inv);">{{teacher.first_name}} {{teacher.last_name}}</button>
+		{% endfor %}
+	</div>
+</div>
+
+
+{% endblock %}

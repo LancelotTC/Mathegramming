@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+
+{% block title %}Take appointment{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/contact_us.css">
+
+
+{% endblock %}
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {% endblock %}
+
+{% block content %}
+</nav>
+<form id="inner-container" method="POST" style="margin-top: 5rem;" action="{{url_for('views.appointment')}}">
+	<h1 class="main-title">New appointment</h1>
+	<select name="teacher" required>
+		<option value="default">Choose teacher</option>
+		{% for teacher in teachers %}
+			<option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
+		{% endfor %}
+	</select>
+	<select name="subject" required>
+		<option value="default">Choose subject</option>
+		<option value="pricing-question">Mathematics</option>
+		<option value="website-issue">Physics</option>
+		<option value="other">Programming</option>
+		<option value="other">Other</option>
+	</select>
+	<textarea name="description" cols="30" rows="10"
+		placeholder="Small explanation about the purpose of the appointment" required></textarea>
+	<input type="date" name="date" required>
+
+	<span id="time-picker">
+		<div>
+			<label for="start-time">Start time:</label>
+			<input type="time" name="start-time" placeholder="time" required>
+		</div>
+		<div>
+			<label for="end-time">End time:</label>
+			<input type="time" name="end-time" placeholder="time" required>
+		</div>
+	</span>
+	<p>By clicking "Take appointment", you agree to the <a href="#">Privacy</a> and <a href="#">Terms of Service</a>.
+	</p>
+	<button type="submit">Take appointment</button>
+</form>
+
+{% endblock %}

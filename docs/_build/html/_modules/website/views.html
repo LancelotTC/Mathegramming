@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>website.views &mdash; Mathegramming 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Mathegramming
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Mathegramming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../website.html">website</a></li>
+      <li class="breadcrumb-item active">website.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for website.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span>
+<span class="kn">from</span> <span class="nn">werkzeug.wrappers.response</span> <span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">current_user</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Notification</span><span class="p">,</span> <span class="n">Post</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">CommentReaction</span><span class="p">,</span> <span class="n">PostReaction</span><span class="p">,</span> <span class="n">Appointment</span><span class="p">,</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">func</span><span class="p">,</span> <span class="n">or_</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
+<span class="kn">import</span> <span class="nn">json</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+
+<span class="n">views</span><span class="p">:</span> <span class="n">Blueprint</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Global variable used in views.forum</span>
+<span class="n">posted_data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="s2">&quot;posts&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+	<span class="s2">&quot;filter&quot;</span><span class="p">:</span>
+		<span class="p">{</span>
+			<span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">999999</span><span class="p">),</span> <span class="s2">&quot;All&quot;</span><span class="p">),</span>
+			<span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">,</span> <span class="s2">&quot;All&quot;</span><span class="p">),</span>
+			<span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">,</span> <span class="s2">&quot;All&quot;</span><span class="p">)</span>
+		<span class="p">},</span>
+	<span class="s2">&quot;search_query&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="write"><a class="viewcode-back" href="../../website.html#website.views.write">[docs]</a><span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Any</span><span class="o">=</span><span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Function to write anything in instance/text.txt.&quot;&quot;&quot;</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;instance/text.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+		<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../website.html#website.views.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">element_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Shorthand for request.form.get()&quot;&quot;&quot;</span>
+
+	<span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">element_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_pretty_date_delta"><a class="viewcode-back" href="../../website.html#website.views.get_pretty_date_delta">[docs]</a><span class="k">def</span> <span class="nf">get_pretty_date_delta</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Function that accepts a type timedelta and returns a readable time difference.</span>
+
+<span class="sd">	Feel free to rename or reassign function as name is quite long.</span>
+<span class="sd">	Ex:</span>
+<span class="sd">	-&gt; get_pretty_date_delta(timedelta(seconds=54))</span>
+
+<span class="sd">	-&gt; &quot;A few seconds ago&quot;</span>
+
+
+<span class="sd">	-&gt; get_pretty_date_delta(timedelta(hours=48))</span>
+
+<span class="sd">	-&gt; &quot;2 days ago&quot;</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+	<span class="k">if</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">59</span><span class="p">):</span> <span class="c1"># Less than 1m</span>
+		<span class="k">return</span> <span class="s2">&quot;A few seconds&quot;</span>
+	<span class="k">elif</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># Less than 1h</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">60</span>
+		<span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;minutes&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;minute&quot;</span>
+	<span class="k">elif</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># Less than 1d</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+		<span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;hours&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;hour&quot;</span>
+	<span class="k">elif</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># Less than 1w</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">days</span>
+		<span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;days&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;day&quot;</span>
+	<span class="k">elif</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span> <span class="c1"># Less than 1mth</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">days</span> <span class="o">//</span> <span class="mi">7</span>
+		<span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;weeks&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;week&quot;</span>
+	<span class="k">elif</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">52</span><span class="p">):</span> <span class="c1"># Less than 1y</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">days</span> <span class="o">//</span> <span class="mi">30</span>
+		<span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;months&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;month&quot;</span>
+	<span class="k">else</span><span class="p">:</span> <span class="c1"># Above 1y</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">days</span> <span class="o">//</span> <span class="mi">365</span>
+		<span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;years&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;year&quot;</span>
+
+	<span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="exercises"><a class="viewcode-back" href="../../website.html#website.views.exercises">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/exercises&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">exercises</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the exercises.html page if user is logged-in.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;exercises.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="home"><a class="viewcode-back" href="../../website.html#website.views.home">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the home.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;home.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="default"><a class="viewcode-back" href="../../website.html#website.views.default">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/home&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Redirects to the views.home function.</span>
+
+<span class="sd">	It&#39;s purpose is to not throw a 404 error when going to http://127.0.0.1:5000/.</span>
+
+<span class="sd">	-&gt; http://127.0.0.1:5000/ = http://127.0.0.1:5000/home</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.home&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="embedded_course"><a class="viewcode-back" href="../../website.html#website.views.embedded_course">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/embedded_course&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">embedded_course</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the embedded_course.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;embedded_course.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span> <span class="n">teachers</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">account_type</span><span class="o">=</span><span class="s2">&quot;teacher&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="text_course"><a class="viewcode-back" href="../../website.html#website.views.text_course">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/text_course&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">text_course</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the text_course.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;text_course.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span> <span class="n">teachers</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">account_type</span><span class="o">=</span><span class="s2">&quot;teacher&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="video_course"><a class="viewcode-back" href="../../website.html#website.views.video_course">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/video_course&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">video_course</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the video_course.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;video_course.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span> <span class="n">teachers</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">account_type</span><span class="o">=</span><span class="s2">&quot;teacher&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="course_finished"><a class="viewcode-back" href="../../website.html#website.views.course_finished">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/course_finished&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">course_finished</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the course_finished.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;course_finished.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="pricing"><a class="viewcode-back" href="../../website.html#website.views.pricing">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/pricing&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">pricing</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the pricing.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;pricing.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="account"><a class="viewcode-back" href="../../website.html#website.views.account">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">account</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the account.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;account.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="appearance"><a class="viewcode-back" href="../../website.html#website.views.appearance">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/appearance&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">appearance</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the appearance.html page&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;appearance.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="email_prefs"><a class="viewcode-back" href="../../website.html#website.views.email_prefs">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/email_preferences&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">email_prefs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the emails_prefs.html page&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">security_emails</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;security-emails&quot;</span><span class="p">)</span>
+		<span class="n">activity_emails</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;activity-emails&quot;</span><span class="p">)</span>
+		<span class="n">promotional_emails</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;promotional-emails&quot;</span><span class="p">)</span>
+
+
+		<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+		<span class="n">user</span><span class="o">.</span><span class="n">security_emails</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">security_emails</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span> <span class="k">else</span> <span class="kc">False</span>
+		<span class="n">user</span><span class="o">.</span><span class="n">activity_emails</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">activity_emails</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span> <span class="k">else</span> <span class="kc">False</span>
+		<span class="n">user</span><span class="o">.</span><span class="n">promotional_emails</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">promotional_emails</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span> <span class="k">else</span> <span class="kc">False</span>
+
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+		
+		<span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.email_prefs&quot;</span><span class="p">))</span>
+
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;email_prefs.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_filter"><a class="viewcode-back" href="../../website.html#website.views.get_filter">[docs]</a><span class="k">def</span> <span class="nf">get_filter</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	This function generates a dict object that matches the expected values in forum.html</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">dct_date</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s2">&quot;date-all&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">999999</span><span class="p">),</span> <span class="c1"># Update in 2740 years</span>
+		<span class="s2">&quot;date-hour&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">24</span><span class="p">),</span>
+		<span class="s2">&quot;date-day&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+		<span class="s2">&quot;date-week&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+		<span class="s2">&quot;date-month&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+		<span class="s2">&quot;date-year&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">365</span><span class="p">)</span>
+	<span class="p">}</span>
+	
+	<span class="n">dct_subject</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s2">&quot;subject-all&quot;</span><span class="p">:</span> <span class="s2">&quot;All&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;subject-mathematics&quot;</span><span class="p">:</span> <span class="s2">&quot;Mathematics&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;subject-physics&quot;</span><span class="p">:</span> <span class="s2">&quot;Physics&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;subject-programming&quot;</span><span class="p">:</span> <span class="s2">&quot;Programming&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;subject-other&quot;</span><span class="p">:</span> <span class="s2">&quot;other&quot;</span>
+	<span class="p">}</span>
+
+	<span class="n">dct_category</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s2">&quot;category-all&quot;</span><span class="p">:</span> <span class="s2">&quot;All&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;category-ask&quot;</span><span class="p">:</span> <span class="s2">&quot;ask&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;category-news&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;category-discussion&quot;</span><span class="p">:</span> <span class="s2">&quot;discussion&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;category-bug&quot;</span><span class="p">:</span> <span class="s2">&quot;bug&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;category-other&quot;</span><span class="p">:</span> <span class="s2">&quot;other&quot;</span>
+	<span class="p">}</span>
+
+
+	<span class="c1"># CAUTION: filter overrides Python&#39;s built-in class filter</span>
+	<span class="nb">filter</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">dct_date</span><span class="p">[</span><span class="n">date</span><span class="p">],</span> <span class="n">date</span><span class="p">),</span>
+		<span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">dct_subject</span><span class="p">[</span><span class="n">subject</span><span class="p">],</span> <span class="n">subject</span><span class="p">),</span>
+		<span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">dct_category</span><span class="p">[</span><span class="n">category</span><span class="p">],</span> <span class="n">category</span><span class="p">),</span>
+	   <span class="p">}</span>
+	<span class="k">return</span> <span class="nb">filter</span></div>
+
+<div class="viewcode-block" id="forum"><a class="viewcode-back" href="../../website.html#website.views.forum">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/forum&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">forum</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the forum.html page and manages the post request sent by filters and search.&quot;&quot;&quot;</span>
+  <span class="c1"># vvvvvvvvvvvvvvvvvv See issue number 3 in GitLab</span>
+	<span class="k">global</span> <span class="n">posted_data</span>
+
+	<span class="c1"># Creates a dict where the key is the id of the post and the value is the amount of comments on said post.</span>
+	<span class="c1"># {post_id: number_of_comments, ...}</span>
+	<span class="c1"># Doesn&#39;t create any entries for posts that have no comments.</span>
+	<span class="c1"># It might be a good idea to make it so that it creates these entries anyway.</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">post_id</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">id</span><span class="p">))</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">post_id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+	<span class="n">nb_comments</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">}</span>
+
+	<span class="c1"># Default filtering settings</span>
+	<span class="nb">filter</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">999999</span><span class="p">),</span> <span class="s2">&quot;All&quot;</span><span class="p">),</span> <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">,</span> <span class="s2">&quot;All&quot;</span><span class="p">),</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">,</span> <span class="s2">&quot;All&quot;</span><span class="p">)}</span>
+
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="c1"># data is sent with JavaScript as a JSON type.</span>
+		<span class="c1"># If method == POST but there&#39;s no data, that means that the user clicked on &quot;create post&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">data</span> <span class="o">=</span> <span class="n">js</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+		<span class="k">except</span> <span class="n">js</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.forum&quot;</span><span class="p">))</span> <span class="c1"># views.create_post</span>
+		
+		<span class="n">search_query</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;search_query&quot;</span><span class="p">]</span>
+
+		<span class="nb">filter</span> <span class="o">=</span> <span class="n">get_filter</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;by-date&quot;</span><span class="p">],</span> <span class="n">subject</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;by-subject&quot;</span><span class="p">],</span> <span class="n">category</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">])</span>
+		
+		<span class="c1"># Posts that match the search. Pattern matching and the like are done in the DB itself.</span>
+		<span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">or_</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">like</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">search_query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)),</span> <span class="n">Post</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">search_query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">))</span>
+
+		<span class="c1"># This is done in order to not get the values overwritten by a GET request.</span>
+		<span class="c1"># See issue number on top of function.</span>
+		<span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;posts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">posts</span>
+		<span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">filter</span>
+		<span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;search_query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_query</span>
+
+	<span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+		<span class="n">search_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+		<span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span>
+
+		<span class="c1"># Retrieving previously POSTed information if there are any (again, refer to the issue on top of this function)</span>
+		<span class="c1"># This is an ugly way of saying &quot;if the dictionary is not equal to the default dictionary&quot;</span>
+		<span class="c1"># The default value of posted_data[&quot;posts&quot;] is None. If posted_data[&quot;posts&quot;] is None, I want to give Post.query instead.</span>
+		<span class="c1"># Otherwise if posted_data[&quot;posts&quot;] is something else, then it means it comes from the POST request, so I want it.</span>
+		<span class="k">if</span> <span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;posts&quot;</span><span class="p">]:</span> 
+			<span class="n">posts</span> <span class="o">=</span> <span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;posts&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;posts&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span>
+			<span class="nb">filter</span> <span class="o">=</span> <span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span>
+			<span class="n">search_query</span> <span class="o">=</span> <span class="n">posted_data</span><span class="p">[</span><span class="s2">&quot;search_query&quot;</span><span class="p">]</span>
+
+			<span class="c1"># The default value of posts is None</span>
+			<span class="n">posted_data</span> <span class="o">=</span> <span class="p">{</span>
+				<span class="s2">&quot;posts&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+				<span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">999999</span><span class="p">),</span> <span class="s2">&quot;All&quot;</span><span class="p">),</span>
+				<span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">,</span> <span class="s2">&quot;All&quot;</span><span class="p">),</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">,</span> <span class="s2">&quot;All&quot;</span><span class="p">)},</span>
+				<span class="s2">&quot;search_query&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+			<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span>
+			<span class="s2">&quot;forum.html&quot;</span><span class="p">,</span>
+			<span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span>
+			<span class="n">users</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+			<span class="n">posts</span><span class="o">=</span><span class="n">posts</span><span class="p">,</span>
+			<span class="n">nb_comments</span><span class="o">=</span><span class="n">nb_comments</span><span class="p">,</span>
+			<span class="n">now</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">utcnow</span><span class="p">,</span>
+			<span class="n">get_delta</span><span class="o">=</span><span class="n">get_pretty_date_delta</span><span class="p">,</span>
+			<span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span>
+			<span class="n">search_query</span><span class="o">=</span><span class="n">search_query</span>
+		<span class="p">)</span></div>
+
+<div class="viewcode-block" id="create_post"><a class="viewcode-back" href="../../website.html#website.views.create_post">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/create_post&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">create_post</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Renders create_post.html and creates posts and a notification</span>
+<span class="sd">	to notify the user that their post has successfully been created.</span>
+<span class="sd">	It then redirects to views.forum</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+		<span class="n">category</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+		<span class="n">subject</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject&quot;</span><span class="p">)</span>
+		<span class="n">content</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
+
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Post</span><span class="p">(</span>
+				<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+				<span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+				<span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span>
+				<span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span>
+				<span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+				<span class="n">score</span><span class="o">=</span><span class="mi">0</span>
+			<span class="p">)</span>
+		<span class="p">)</span>
+
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Notification</span><span class="p">(</span>
+				<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+				<span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Your post </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> was posted successfully&quot;</span><span class="p">,</span>
+				<span class="n">description</span><span class="o">=</span><span class="s2">&quot;Click here to review your posts and answers.&quot;</span><span class="p">,</span>
+				<span class="n">link</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+			<span class="p">)</span>
+		<span class="p">)</span>
+
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.forum&quot;</span><span class="p">))</span>
+
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;create_post.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="post"><a class="viewcode-back" href="../../website.html#website.views.post">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/post/&lt;post_id&gt;&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">post_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders post.html where the path is the id and also manages comment&#39;s posting on the post.</span>
+
+<span class="sd">	Ex: The page&#39;s URL for a post, which id is 3, will be http://127.0.0.1:5000/post/3</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="c1"># If comment is empty I want to render the page without sending the comment (I don&#39;t want to send empty comments)</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span> <span class="ow">or</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;comment&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+		<span class="n">post</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+		<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+		<span class="n">comments</span> <span class="o">=</span> <span class="n">Comment</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">post_id</span><span class="o">=</span><span class="n">post_id</span><span class="p">)</span>
+
+		<span class="c1"># Get all the users that have sent comments on post_id.</span>
+		<span class="c1"># Users can have multiple comments per post, so distinct is needed here</span>
+		<span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Comment</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">post_id</span><span class="o">==</span><span class="n">post_id</span><span class="p">)</span>
+		<span class="c1"># comment_reactions = CommentReaction.query.join(Comment).filter(Comment.post_id==post_id)</span>
+
+		<span class="c1"># The next 2 lines will get all CommentReaction for every Comment in Post</span>
+		<span class="c1"># Get all the ids of the comments of the post</span>
+		<span class="n">comment_subquery</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">post_id</span> <span class="o">==</span> <span class="n">post_id</span><span class="p">)</span><span class="o">.</span><span class="n">subquery</span><span class="p">()</span>
+		<span class="c1"># Then get all the reactions, from which comment_id is in the comment_subquery (line just above)</span>
+		<span class="n">comment_reactions</span> <span class="o">=</span> <span class="n">CommentReaction</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">CommentReaction</span><span class="o">.</span><span class="n">comment_id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">comment_subquery</span><span class="p">))</span>
+
+		<span class="c1"># PostReaction from the logged-in user.</span>
+		<span class="n">post_reaction</span> <span class="o">=</span> <span class="n">PostReaction</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">post_id</span><span class="o">=</span><span class="n">post_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+		<span class="c1"># I have to pass in CommentReaction because</span>
+		<span class="c1"># I iterate through the comments and I have to pass in each CommentReaction</span>
+		<span class="c1"># It is possible to scrape off some arguments by making some changes to post.html,</span>
+		<span class="c1"># although it might be less readable in that case.</span>
+		<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;post.html&quot;</span><span class="p">,</span>
+				<span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span>
+				<span class="n">author</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+				<span class="n">post</span><span class="o">=</span><span class="n">post</span><span class="p">,</span>
+				<span class="n">comments</span><span class="o">=</span><span class="n">comments</span><span class="p">,</span>
+				<span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span>
+				<span class="n">post_reaction</span><span class="o">=</span><span class="n">post_reaction</span><span class="p">,</span>
+				<span class="n">comment_reactions</span><span class="o">=</span><span class="n">comment_reactions</span><span class="p">,</span>
+				<span class="n">CommentReaction</span><span class="o">=</span><span class="n">CommentReaction</span><span class="p">,</span>
+				<span class="n">now</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">utcnow</span><span class="p">,</span>
+				<span class="n">get_delta</span><span class="o">=</span><span class="n">get_pretty_date_delta</span><span class="p">,</span>
+			<span class="p">)</span>
+
+	<span class="c1"># User sends a (non-empty) comment</span>
+	<span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="c1"># CAUTION: the attribute &quot;answer_for&quot; is an attribute that was created</span>
+		<span class="c1"># to implement the feature that lets users reply to other comments.</span>
+		<span class="c1"># answer_for=post_id is just a placeholder.</span>
+		<span class="n">new_comment</span> <span class="o">=</span> <span class="n">Comment</span><span class="p">(</span>
+			<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+			<span class="n">post_id</span><span class="o">=</span><span class="n">post_id</span><span class="p">,</span>
+			<span class="n">score</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+			<span class="n">content</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;comment&quot;</span><span class="p">),</span>
+			<span class="n">answer_for</span><span class="o">=</span><span class="n">post_id</span>
+		<span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_comment</span><span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.post&quot;</span><span class="p">,</span> <span class="n">post_id</span><span class="o">=</span><span class="n">post_id</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="comment_vote"><a class="viewcode-back" href="../../website.html#website.views.comment_vote">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/comment_vote&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">comment_vote</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Handles comments impressions (like/dislikes).</span>
+<span class="sd">	It is probably possible to merge comment_vote and post_vote together</span>
+<span class="sd">	and/or make a decorator function, since they are both similar to each other.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">reaction</span> <span class="o">=</span> <span class="n">js</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+	<span class="n">comment_id</span> <span class="o">=</span> <span class="n">reaction</span><span class="p">[</span><span class="s2">&quot;commentId&quot;</span><span class="p">]</span>
+	<span class="n">vote_result</span> <span class="o">=</span> <span class="n">reaction</span><span class="p">[</span><span class="s2">&quot;voteResult&quot;</span><span class="p">]</span>
+	<span class="n">vote</span> <span class="o">=</span> <span class="n">CommentReaction</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">comment_id</span><span class="o">=</span><span class="n">comment_id</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+	<span class="n">comment</span> <span class="o">=</span> <span class="n">Comment</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">comment_id</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">vote</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">vote</span><span class="o">.</span><span class="n">vote</span> <span class="o">==</span> <span class="n">vote_result</span><span class="p">:</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">vote</span><span class="p">)</span>
+			<span class="n">comment</span><span class="o">.</span><span class="n">score</span> <span class="o">-=</span> <span class="n">vote_result</span>
+
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">vote</span><span class="o">.</span><span class="n">vote</span> <span class="o">=</span> <span class="n">vote_result</span>
+			<span class="n">comment</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">*</span><span class="n">vote_result</span>
+
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">new_comment_reaction</span> <span class="o">=</span> <span class="n">CommentReaction</span><span class="p">(</span>
+			<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+			<span class="n">vote</span><span class="o">=</span><span class="n">vote_result</span><span class="p">,</span>
+			<span class="n">comment_id</span><span class="o">=</span><span class="n">comment_id</span>
+		<span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_comment_reaction</span><span class="p">)</span>
+		<span class="n">comment</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="n">vote_result</span>
+
+
+	<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="post_vote"><a class="viewcode-back" href="../../website.html#website.views.post_vote">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/post_vote&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">post_vote</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Handles post impressions (like/dislikes).</span>
+<span class="sd">	It is probably possible to merge comment_vote and post_vote together</span>
+<span class="sd">	and/or make a decorator function, since they are both similar to each other.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">reaction</span> <span class="o">=</span> <span class="n">js</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+	<span class="n">post_id</span> <span class="o">=</span> <span class="n">reaction</span><span class="p">[</span><span class="s2">&quot;postId&quot;</span><span class="p">]</span>
+	<span class="n">vote_result</span> <span class="o">=</span> <span class="n">reaction</span><span class="p">[</span><span class="s2">&quot;voteResult&quot;</span><span class="p">]</span>
+	<span class="n">vote</span> <span class="o">=</span> <span class="n">PostReaction</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">post_id</span><span class="o">=</span><span class="n">post_id</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+	<span class="n">post</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">post_id</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">vote</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">vote</span><span class="o">.</span><span class="n">vote</span> <span class="o">==</span> <span class="n">vote_result</span><span class="p">:</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">vote</span><span class="p">)</span>
+			<span class="n">post</span><span class="o">.</span><span class="n">score</span> <span class="o">-=</span> <span class="n">vote_result</span>
+
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">vote</span><span class="o">.</span><span class="n">vote</span> <span class="o">=</span> <span class="n">vote_result</span>
+			<span class="n">post</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">vote_result</span>
+
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">new_post_reaction</span> <span class="o">=</span> <span class="n">PostReaction</span><span class="p">(</span>
+			<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+			<span class="n">vote</span><span class="o">=</span><span class="n">vote_result</span><span class="p">,</span>
+			<span class="n">post_id</span><span class="o">=</span><span class="n">post_id</span>
+		<span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_post_reaction</span><span class="p">)</span>
+		<span class="n">post</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="n">vote_result</span>
+
+
+	<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="contact_us"><a class="viewcode-back" href="../../website.html#website.views.contact_us">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/contact_us&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">contact_us</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the contact_us.html page and creates a Message object in DB and a Notification&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Message</span><span class="p">(</span>
+				<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+				<span class="n">phone_number</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;phone-number&quot;</span><span class="p">),</span>
+				<span class="n">reason</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reason&quot;</span><span class="p">),</span>
+				<span class="n">title</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">),</span>
+				<span class="n">message</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
+			<span class="p">),</span>
+		<span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Notification</span><span class="p">(</span>
+			<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+			<span class="n">title</span><span class="o">=</span><span class="s2">&quot;Your message was successfully sent&quot;</span><span class="p">,</span>
+			<span class="n">description</span><span class="o">=</span><span class="s2">&quot;You will receive an answer in under 2 working days.&quot;</span><span class="p">,</span>
+			<span class="n">link</span><span class="o">=</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.activity_information&quot;</span><span class="p">)</span>
+			<span class="p">)</span>
+		<span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.contact_us_finalized&quot;</span><span class="p">))</span>
+		
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;contact_us.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="contact_us_finalized"><a class="viewcode-back" href="../../website.html#website.views.contact_us_finalized">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/contact_us_finalized&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">contact_us_finalized</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the contact_us_finalized.html page.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;contact_us_finalized.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="appointment"><a class="viewcode-back" href="../../website.html#website.views.appointment">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/appointment&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">appointment</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the appointment.html page and creates an Appointment object in DB and a Notification&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">date</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+		<span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start-time&quot;</span><span class="p">),</span> <span class="s2">&quot;%H:%M&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Appointment</span><span class="p">(</span>
+				<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+				<span class="n">teacher_name</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;teacher&quot;</span><span class="p">),</span>
+				<span class="n">subject_name</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject&quot;</span><span class="p">),</span>
+				<span class="n">description</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">),</span>
+				<span class="n">date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">),</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+				<span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="c1"># I put get(&quot;start_time&quot;) in variable because referenced 2 times</span>
+				<span class="n">end_time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end-time&quot;</span><span class="p">),</span> <span class="s2">&quot;%H:%M&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+			<span class="p">)</span>
+		<span class="p">)</span>
+
+		<span class="c1"># Add notification for the user who scheduled the appointment</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Notification</span><span class="p">(</span>
+			<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+			<span class="n">title</span><span class="o">=</span><span class="s2">&quot;Your appointment was successfully scheduled&quot;</span><span class="p">,</span>
+			<span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Your appointment was successfully scheduled for the </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">start_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+			<span class="n">link</span><span class="o">=</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.activity_information&quot;</span><span class="p">)</span>
+			<span class="p">)</span>
+		<span class="p">)</span>
+
+		<span class="c1"># Add notification for the selected teacher</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+			<span class="n">Notification</span><span class="p">(</span>
+			<span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="c1"># Placeholder. Change with the id of the selected teacher.</span>
+			<span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;You have an appointment with </span><span class="si">{</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+			<span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Your appointment was scheduled for the </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">start_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+			<span class="n">link</span><span class="o">=</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.activity_information&quot;</span><span class="p">)</span>
+			<span class="p">)</span>
+		<span class="p">)</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.appointment_finalized&quot;</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;appointment.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span> <span class="n">teachers</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">account_type</span><span class="o">=</span><span class="s2">&quot;teacher&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="appointment_finalized"><a class="viewcode-back" href="../../website.html#website.views.appointment_finalized">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/appointment_finalized&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">appointment_finalized</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the appointment_finalized.html page.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;appointment_finalized.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="about_us"><a class="viewcode-back" href="../../website.html#website.views.about_us">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/about_us&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">about_us</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the about_us.html page.&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;about_us.html&quot;</span><span class="p">,</span> <span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="clear_all_notifications"><a class="viewcode-back" href="../../website.html#website.views.clear_all_notifications">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/clear_all_notifications&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">clear_all_notifications</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Deletes all of the User&#39;s Notifications from DB&quot;&quot;&quot;</span>
+	<span class="n">notifications</span> <span class="o">=</span> <span class="n">Notification</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">notifications</span><span class="p">:</span>
+		<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.home&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="activity_information"><a class="viewcode-back" href="../../website.html#website.views.activity_information">[docs]</a><span class="nd">@views</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/activity_information&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">activity_information</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Renders the activity_information.html page&quot;&quot;&quot;</span>
+
+	<span class="c1"># Getting all the information that will be displayed to the user.</span>
+	<span class="n">comments</span> <span class="o">=</span> <span class="n">Comment</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="n">messages</span> <span class="o">=</span> <span class="n">Message</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="n">appointments</span> <span class="o">=</span> <span class="n">Appointment</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="n">subquery</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Comment</span><span class="o">.</span><span class="n">post_id</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+	<span class="n">posts_of_comments</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">subquery</span><span class="p">))</span>
+
+	<span class="c1"># I will need the built-in enumerate to display the list index of all the elements</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;activity_information.html&quot;</span><span class="p">,</span>
+			<span class="n">current_user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="n">comments</span><span class="p">,</span>
+			<span class="n">posts</span><span class="o">=</span><span class="n">posts</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+			<span class="n">appointments</span><span class="o">=</span><span class="n">appointments</span><span class="p">,</span>
+			<span class="n">posts_of_comments</span><span class="o">=</span><span class="n">posts_of_comments</span><span class="p">,</span>
+			<span class="nb">enumerate</span><span class="o">=</span><span class="nb">enumerate</span>
+		<span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Lancelot Tariot Camille.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

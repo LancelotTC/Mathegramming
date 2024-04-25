@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+
+{% block title %}Home{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/exercises.css">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="search-container">
+	<div class="left-side">
+		<button class="sorting-button all">All</button>
+		<button class="sorting-button courses">Courses</button>
+		<button class="sorting-button exercises">Exercises</button>
+	</div>
+	<div class="search">
+		<input type="text" class="search" placeholder="Search courses">
+		<button class="search-button">
+			<img class="search-image" for="search" src="../static/resources/search.svg" alt="Search">
+		</button>
+	</div>
+	<div class="right-side">
+		<div class="select-container">
+			<select name="grades" id="">
+				<option value="">All</option>
+				<option value="">Grade: K-2</option>
+				<option value="">Grade: 3-5</option>
+				<option value="">Grade: 6-8</option>
+				<option value="">Grade: 9-12</option>
+				<option value="">University+</option>
+			</select>
+		</div>
+		<div class="select-container">
+			<select name="subject" id="">
+				<option value="all">All</option>
+				<option value="mathematics">Mathematics</option>
+				<option value="physics">Physics</option>
+				<option value="programming">Programming</option>
+			</select>
+		</div>
+		<div class="select-container">
+			<select name="sort-by" id="">
+				<option value="recent">Recent</option>
+				<option value="views">Most views</option>
+				<option value="likes">Most liked</option>
+			</select>
+		</div>
+
+	</div>
+</div>
+
+<h1 class="subject-title">Subject 1</h1>
+<div class="hslider">
+	<a class="course-link" href="{{url_for('views.embedded_course')}}">
+		<button class="course">
+			<div class="button-container">
+				<div class="image-container"><img class="course-image" src="../static/resources/background.jpg" alt="">
+				</div>
+				<label class="course-label">This is an embedded Scratch course</label>
+			</div>
+		</button>
+	</a>
+	<a class="course-link" href="{{url_for('views.text_course')}}">
+		<button class="course">
+			<div class="button-container">
+				<div class="image-container"><img class="course-image" src="../static/resources/background.jpg" alt="">
+				</div>
+				<label class="course-label">This is a text course</label>
+			</div>
+		</button>
+	</a>
+	<a class="course-link" href="{{url_for('views.video_course')}}">
+		<button class="course">
+			<div class="button-container">
+				<div class="image-container"><img class="course-image" src="../static/resources/background.jpg" alt="">
+				</div>
+				<label class="course-label">This is a video course</label>
+			</div>
+		</button>
+	</a>
+</div>
+<h1 class="subject-title">Subject 1</h1>
+<div class="hslider">
+	<a class="course-link" href="{{url_for('views.embedded_course')}}">
+		<button class="course">
+			<div class="button-container">
+				<div class="image-container"><img class="course-image" src="../static/resources/background.jpg" alt="">
+				</div>
+				<label class="course-label">This is an embedded Scratch course</label>
+			</div>
+		</button>
+	</a>
+	<a class="course-link" href="{{url_for('views.text_course')}}">
+		<button class="course">
+			<div class="button-container">
+				<div class="image-container"><img class="course-image" src="../static/resources/background.jpg" alt="">
+				</div>
+				<label class="course-label">This is a text course</label>
+			</div>
+		</button>
+	</a>
+	<a class="course-link" href="{{url_for('views.video_course')}}">
+		<button class="course">
+			<div class="button-container">
+				<div class="image-container"><img class="course-image" src="../static/resources/background.jpg" alt="">
+				</div>
+				<label class="course-label">This is a video course</label>
+			</div>
+		</button>
+	</a>
+</div>
+{% endblock %}

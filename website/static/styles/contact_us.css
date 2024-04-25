@@ -1,0 +1,63 @@
+#outer-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#inner-container {
+	max-width: 30%;
+	height: fit-content;
+	padding: 1rem;
+	border: solid var(--fg) .3rem;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	row-gap: 1rem;
+	background-color: var(--bg-sec);
+}
+
+#main-title {
+	font-size: 200%;
+	margin: 0;
+}
+
+#time-picker,
+#time-picker div {
+	display: flex;
+	flex-direction: column;
+	row-gap: 1ch;
+}
+
+button[type="submit"] {
+	color: var(--fg);
+	background-color: var(--bg-sec);
+	border: solid var(--fg) .3rem;
+	transition: .2s ease-in-out;
+}
+
+button[type="submit"]:hover {
+	color: var(--ac);
+	border-color: var(--ac);
+	background-color: white;
+}
+
+
+
+@media (max-width: 1600px) {
+	#inner-container {
+		max-width: 50%;
+		margin-top: 5rem;
+	}
+}
+
+@media (max-width: 800px) {
+	#inner-container {
+		max-width: 75%;
+	}
+}
+
+@media (max-width: 540px) {
+	#inner-container {
+		max-width: 90%;
+	}
+}

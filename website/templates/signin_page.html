@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+
+{% block title %}Sign in - Mathegramming{% endblock %}
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="../static/styles/bootstrap_checkbox.css">
+<link rel="stylesheet" type="text/css" href="../static/styles/authentication.css">
+{% endblock %}
+
+
+{% block nav_bar_item %}
+<a href="{{url_for('auth.sign_up')}}" style="float: right;">Sign up</a>
+{% endblock %}
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {%endblock %}
+{% block content %}
+<form class="inner-container" method="POST">
+	<h1>Login into<br>your account</h1>
+
+	<div style="display: flex; column-gap: 1ch; width: 100%">
+		<a href="https://www.google.com">
+			<button>
+				<div class="sign-as">
+					<img src="../static/resources/google_logo.png" alt="" width="30px">
+					Google
+				</div>
+			</button>
+		</a>
+		<a href="https://www.microsoft.com">
+			<button>
+				<div class="sign-as">
+					<img src="../static/resources/microsoft_logo.png" alt="" width="30px">
+					Microsoft
+				</div>
+			</button>
+		</a>
+	</div>
+
+	<hr class="solid" />
+	<input type="email" placeholder="Email" class="inputs" name="email">
+	<input type="password" placeholder="Password" class="inputs" name="password">
+
+	<div class="form-check" style="display: flex; align-items: center; column-gap: 1rem">
+		<input class="form-check-input" type="checkbox" id="remember-me" class="checkbox" name="remember-me">
+		<label class="form-check-label" for="remember-me">
+			Remember me
+		</label>
+	</div>
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				{% if category == "error" %}
+					<p class="alert">{{ message }}</p>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	<br>
+	<button type="submit" style="color: var(--text-bg-inv);">Login</button>
+	<a href="{{url_for('auth.forgot_password')}}" class="forgot-password">Forgot password</a>
+
+</form>
+
+
+{% endblock %}

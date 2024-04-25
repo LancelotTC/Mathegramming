@@ -1,0 +1,108 @@
+#outer-container {
+	height: calc(100vh - 4rem);
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+button,
+button[type="submit"] {
+	border: solid var(--bg) .3em;
+}
+
+input {
+	border: 0;
+}
+
+.inner-container {
+	text-align: center;
+	background-color: var(--fg);
+	min-width: 20%;
+	position: relative;
+	height: fit-content;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	row-gap: 1ch;
+	padding: 2rem;
+}
+
+
+.sign-as {
+	color: var(--text-bg-inv);
+	display: flex;
+	column-gap: .5em;
+	align-items: center
+}
+
+.sign-as * {
+	flex: 1;
+}
+
+hr {
+	border: 0;
+	clear: both;
+	display: block;
+	width: 75%;
+	background-color: var(--bg);
+	height: 3px;
+	margin: .625rem 0px .625rem, 0px;
+}
+
+
+h1 {
+	color: var(--text-bg-inv);
+	margin-bottom: 15px;
+	margin-top: 0px;
+}
+
+
+
+.inputs {
+	color: var(--text-bg);
+	background-color: var(--bg);
+}
+
+.form-check-label {
+	color: var(--text-bg-inv);
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	cursor: pointer;
+	user-select: none;
+}
+
+.checkbox {
+	color: var(--fg);
+	background-color: var(--fg);
+	border-color: var(--bg);
+}
+
+#remember-me:checked {
+	background-color: var(--ac);
+}
+
+
+.label-inner-container {
+	margin: auto;
+	float: left;
+	display: flex;
+	align-items: center;
+}
+
+
+.forgot-password {
+	color: var(--text-bg-inv)
+}
+
+.forgot-password:visited {
+	color: var(--text-bg-inv)
+}
+
+.alert {
+	margin-bottom: 0px;
+	max-width: 280px;
+	color: red;
+}

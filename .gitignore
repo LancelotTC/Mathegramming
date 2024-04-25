@@ -1,0 +1,9 @@
+.vscode/
+__pycache__/
+website/__pycache__/
+instance/
+mathegramming-website/
+test.git/
+website/.my_py_cache
+website/__pycache__
+website/old_models.py

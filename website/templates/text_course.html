@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %} Course name {% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/course.css">
+{% endblock %}
+
+{% block content %}
+
+<div id="inner-container">
+	<div class="game-container" style="
+	flex-direction: column;
+	justify-content: unset;
+	padding: 1rem 5rem;
+	background-color: var(--bg);
+	overflow-y: scroll">
+		<h1>Derivatives in Calculus</h1>
+		<p>
+			Calculus is the study of functions, and one useful attribute to know about a function is how fast it
+			changes. Recall that the slope of a function describes how fast the function changes, and the slope of a
+			function can be found with the formula
+			m
+			=
+			y
+			1
+			-
+			y
+			0
+			x
+			1
+			-
+			x
+			0
+			where m stands for slope,
+			(
+			x
+			0
+			,
+			y
+			0
+			)
+			is the starting point and
+			(
+			x
+			1
+			,
+			y
+			1
+			)
+			is the endpoint of the interval in question. This formula looks at the long-term behavior of a function
+			between two discrete points, such as
+			x
+			0
+			=
+			1.0
+			and
+			x
+			1
+			=
+			2.0
+			. Differential calculus, on the other hand, studies the instantaneous rate of change of a function. This
+			means that differential calculus studies the change in a function between two continuous points such as
+			x
+			0
+			=
+			1.0
+			and
+			x
+			0
+			=
+			1.000000000000000001
+			. For example, the velocity of an object is a measure of the instantaneous rate of change of the object's
+			displacement, and an object's acceleration is a measure of the instantaneous rate of change of the object's
+			velocity.
+		</p>
+
+		<h1>Computing Derivatives</h1>
+		<p>
+			To move away from the notion of the slope of a line which describes the discrete, long-term behavior of a
+			function, the first step is to think about taking the limit of a function. Taking the limit of a function
+			means to look at the behavior of a function as the function approaches a given point, and, when taking a
+			limit, it is important to specify if the limit is being taken from
+			-
+			∞
+			or
+			∞
+			. To take a limit from
+			-
+			∞
+			or
+			∞
+			means to start at either the far left of the function or the far right of the function, and then to trace
+			the function to the given point. The value that the function approaches as the point is reached is the limit
+			of the function if the function approaches the same value from both
+			-
+			∞
+			and
+			∞
+
+		</p>
+		<div style="display: flex; column-gap: 1rem">
+			<p>For example, for the function pictured in Figure 1, the limit of the function at Point A is 1.0 because,
+				whether looking from
+				−
+				∞
+				or
+				∞
+				, the function always approaches 1.0. There are cases when a function will not approach the same value
+				from both
+				−
+				∞
+				and
+				∞
+				, as in Figure 2. Notice in Figure 2 that if x = 8 is approached from
+				−
+				∞
+				the function equals 4, but if x = 8 is approached from
+				∞
+				the function equals 3. If a function approaches a different value depending on the direction it is
+				observed from, the limit does not exist (DNE).
+
+				This method for taking the limit of a function is not enough to describe the instantaneous change in the
+				function, however. To describe the instantaneous change in a function, the limit that is taken must find
+				the slope of the tangent line to the function. A tangent line is a line that is drawn through a specific
+				point to represent the slope of the function at that point, and Figure 3 illustrates the tangent lines
+				of three points on the graph of
+				f
+				(
+				x
+				)
+				=
+				x
+				3
+				x
+				−
+				2
+				x
+				. Formally, the limit definition of the derivative of a function is
+				f
+				′
+				(
+				x
+				)
+				=
+				l
+				i
+				m
+				Δ
+				x
+				→
+				0
+				f
+				(
+				x
+				+
+				Δ
+				x
+				)
+				−
+				f
+				(
+				x
+				)
+				Δ
+				x
+				where f'(x) stands for the derivative of f(x), and
+				Δ
+				x
+				is a small change in x.
+
+			</p>
+			<img src="https://study.com/cimages/multimages/16/geogebra-export-72873145396272833791.png" alt=""
+				style="max-width: 100%">
+		</div>
+	</div>
+	<div class="controls">
+		<div class="first-line">
+			<button class="control">Pause</button>
+			<button class="control">Previous</button>
+			<button class="control">Next</button>
+		</div>
+		<div class="second-line">
+			<button class="control">Restart course</button>
+			<a href="{{url_for('views.course_finished')}}">
+				<button class="control">Finish course</button>
+			</a>
+			<button class="control">Report a problem</button>
+		</div>
+	</div>
+</div>
+
+<div class="side-container">
+	<h1>Name of the course</h1>
+	<p>Description of the course. Description of the course. Description of the course. Description of the course.
+		Description of the course. </p>
+
+
+	<div class="teacher-help" style="display: flex; flex-direction: column; row-gap: 1ch;">
+		<p>Teachers: {{ teachers.count() }}</p>
+		{% for teacher in teachers %}
+			<button type="button" style="color: var(--text-bg-inv);">{{teacher.first_name}} {{teacher.last_name}}</button>
+		{% endfor %}
+	</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+
+{% block title %}Account preferences{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/account.css">
+<link rel="stylesheet" href="../static/styles/appearance.css">
+{% endblock %}
+
+{% block content %}
+
+<details class="details">
+	<summary class="summary"><img src="../static/resources/hamburger_icon.png" alt="Show sidebar"></summary>
+	<div class="sidebar">
+		<div style="padding-bottom: 4rem;">
+			<div class="profile-area-sidebar">
+				<div class="profile-picture-sidebar"></div>
+				<h2>
+					{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+						{{current_user.first_name}} {{current_user.last_name}}
+					{% else %}
+						{{current_user.username}}
+					{% endif %}
+				</h2>
+			</div>
+
+			<a href="{{url_for('views.account')}}"><button>Account profile</button></a>
+			<a href="{{url_for('views.activity_information')}}"><button>Acitivity information</button></a>
+			<a href="{{url_for('views.appearance')}}"><button>Appearance</button></a>
+			<a href="{{url_for('views.email_prefs')}}"><button>Email preferences</button></a>
+			<a href="{{url_for('auth.logout')}}"><button>Logout</button></a>
+		</div>
+	</div>
+</details>
+
+<div class="sidebar normal-sidebar">
+	<div style="padding-bottom: 4rem;">
+		<div class="profile-area-sidebar">
+			<div class="profile-picture-sidebar"></div>
+			<h2>
+				{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+					{{current_user.first_name}} {{current_user.last_name}}
+				{% else %}
+					{{current_user.username}}
+				{% endif %}
+			</h2>
+		</div>
+
+		<a href="{{url_for('views.account')}}"><button>Account profile</button></a>
+		<a href="{{url_for('views.activity_information')}}"><button>Acitivity information</button></a>
+		<a href="{{url_for('views.appearance')}}"><button>Appearance</button></a>
+		<a href="{{url_for('views.email_prefs')}}"><button>Email preferences</button></a>
+		<a href="{{url_for('auth.logout')}}"><button>Logout</button></a>
+	</div>
+</div>
+
+<div class="fixed-shadow fixed-shadow-left"></div>
+
+<div id="inner-container">
+	<h1>Appearance</h1>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Account deletion{% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/authentication.css">
+<link rel="stylesheet" href="../static/styles/account_deletion.css">
+{% endblock %}
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {%endblock %}
+
+{% block content %}
+
+<form class="inner-container" method="POST" action="{{url_for('auth.delete_account')}}">
+	<h1>Account deletion</h1>
+	<p style="color: white; margin: 0;">This action is irreversible!</p>
+
+	<input type="password" class="inputs" name="password" placeholder="Password">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				{% if category == "error" %}
+					<p class="alert" style="margin: 0;">{{ message }}</p>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	<button type="submit" method="POST" id="delete">Delete account</button>
+</form>
+
+{% endblock %}

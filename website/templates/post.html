@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Forum{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/post.css">
+<script src="../static/script/post.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="inner-container">
+	<h1>{{ post.title.capitalize() }}</h1>
+	<div class="info-div">
+		<div class="pfp"></div>
+		<div class="profile-text" style="color: var(--text-bg)">
+			{{author.username}}
+			<p class="tags">{{post.category.capitalize()}} ({{post.subject.capitalize()}})</p>
+		</div>
+	</div>
+	<p class="post-content">{{post.content}}</p>
+	<div class="bottom-div">
+		<p>Posted {{get_delta(now()-post.created)}} ago ({{ (post.created.now() - post.created.utcnow() +
+			post.created).strftime("%d/%m/%Y - %H:%M LT") }})</p>
+		<div class="score-div">
+			<button class="score-button upvote" id="upvote" onclick="postVote({{ post.id }}, 1)">
+				<div class="arrow-up"
+					style='{{"border-bottom: 15px solid green;" if post_reaction.vote == 1 else "border-bottom: solid var(--text-bg-sec) 15px;"}}'>
+				</div>
+			</button>
+			<p class="score" style="
+				color: {{'var(--text-bg-sec) !important' if post.score == 0 else unset}};
+				color: {{'green' if post.score>-1 else 'red'}}">
+				{{post.score}}
+			</p>
+			<button class="score-button downvote" id="downvote" onclick="postVote({{ post.id }}, -1)">
+				<div class="arrow-down"
+					style='{{"border-top: 15px solid red;" if post_reaction.vote == -1 else "border-top: solid var(--text-bg-sec) 15px;"}}'>
+				</div>
+			</button>
+		</div>
+		<button>Report post</button>
+	</div>
+	<h3>Comments:</h3>
+	<form method="POST" action="{{ url_for('views.post', post_id=post.id) }}">
+		<textarea name="comment" id="comment" cols="30" rows="5" placeholder="Type in your comment"></textarea>
+		<button id="send-comment" type="submit">Send comment</button>
+	</form>
+
+	<hr style="border: solid lightgrey .1rem; width: 60%; margin: 1.5rem auto;">
+
+	<div class="comment-section">
+		<select name="" id="" class="sort-by">
+			<option value="">Sort by</option>
+		</select>
+		{% for comment in comments[::-1] %}
+			<div class="comment">
+				<div class="info-div">
+					<div class="pfp"></div>
+					<div class="profile-text">
+						{{users.filter_by(id=comment.id).first().username}}
+						<div class="meta-data">
+							{{ get_delta(now()-comment.created) }} ago
+							({{ (comment.created.now() - comment.created.utcnow() + comment.created).strftime("%d/%m/%Y -
+							%H:%M LT") }})
+						</div>
+					</div>
+
+				</div>
+
+				<div style="display: flex;">
+					<p class="comment-content">
+						{{comment.content}}
+					</p>
+				</div>
+				<div class="comment-action">
+					<div class="score-div">
+						<button class="score-button upvote" id="upvote" onclick="commentVote({{ comment.id }}, 1)">
+							<div class="arrow-up"
+								style='{{"border-bottom: 15px solid green;" if CommentReaction.query.filter_by(comment_id=comment.id, user_id=current_user.id).first().vote == 1 else "border-bottom: solid var(--text-bg-sec) 15px;"}}'>
+							</div>
+						</button>
+
+						<p class="score" style="
+								color: {{'var(--text-bg-sec) !important' if comment.score == 0 else unset}};
+								color: {{'green' if comment.score>-1 else 'red'}}">
+							{{comment.score}}
+						</p>
+
+						<button class="score-button downvote" id="downvote" onclick="commentVote({{ comment.id }}, -1)">
+							<div class="arrow-down"
+								style='{{"border-top: 15px solid red;" if CommentReaction.query.filter_by(comment_id=comment.id, user_id=current_user.id).first().vote == -1 else "border-top: solid var(--text-bg-sec) 15px;"}}'>
+							</div>
+						</button>
+
+						<details>
+							<summary class="reply"><img src="../static/resources/reply_icon.png" alt="Reply"></summary>
+							<div class="inner-reply">
+								<textarea name="" id="" cols="30"
+									rows="5">@{{users.filter_by(id=comment.id).first().username}} </textarea>
+								<button>Send reply</button>
+							</div>
+						</details>
+					</div>
+					<button class="report-button"><img src="../static/resources/flag_icon.png"
+							alt="Report comment"></button>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}

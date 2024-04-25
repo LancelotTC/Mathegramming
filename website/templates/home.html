@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block title %}Welcome{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/home.css">
+{% endblock %}
+
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {% endblock %}
+
+{% block content %}
+<div id="container">
+	<img src="../static/resources/mathegramming_logo.png" alt="">
+	<div>
+		<h1 id="main-title">Mathegramming</h1>
+		<div id="content">
+			<p>Catchphrase here</p>
+			<ul>
+				<li>Learn Mathematics</li>
+				<li>Learn Physics</li>
+				<li>Learn Programming</li>
+				<li>Learn how to use them together</li>
+			</ul>
+		</div>
+	</div>
+	<div id="buttons">
+		{% if current_user.is_authenticated %}
+		<a href="{{url_for('views.appointment')}}" style="flex: 2; order: 1;">
+			<button class="button hover-style important">New appointment</button>
+		</a>
+			<a href="{{url_for('views.exercises')}}" style="flex: 1; order: 2;">
+				<button class="button hover-style">Exercises</button>
+			</a>
+		{% else %}
+			<a href="{{url_for('auth.sign_up')}}" class="sign-buttons-landscape" style="flex: 1;">
+				<button class="button hover-style">Sign up</button>
+			</a>
+			<a href="{{url_for('views.pricing')}}" style="flex: 2;">
+				<button class="button hover-style important">Pricing</button>
+			</a>
+			<a href="{{url_for('auth.login')}}" class="sign-buttons-landscape" style="flex: 1;">
+				<button class="button hover-style">Sign in</button>
+			</a>
+			<div id="sign-buttons-portrait">
+				<a href="{{url_for('auth.sign_up')}}" style="flex: 1;">
+					<button class="button hover-style">Sign up</button>
+				</a>
+				<a href="{{url_for('auth.login')}}" style="flex: 1;">
+					<button class="button hover-style">Sign in</button>
+				</a>
+			</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

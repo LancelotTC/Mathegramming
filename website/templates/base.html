@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}Home{% endblock %} - Mathegramming</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/style.css')}}">
+	<script src="{{url_for('static', filename='script/index.js')}}"></script>
+	<link rel="icon" href="{{url_for('static', filename='mathegramming_logo.png')}}">
+	{% block imports %}
+	{% endblock %}
+</head>
+
+<body {% block background %}{%endblock %}>
+	<nav class="topnav">
+		<div class="left-nav">
+			<a class="active" href="{{ url_for('views.home') }}">
+				<img class="main-logo" src="{{ url_for('static', filename='resources/mathegramming_logo.png') }}"
+					alt="MG">
+			</a>
+			<a href="{{url_for('views.contact_us')}}">Contact Us</a>
+			<a href="{{url_for('views.pricing')}}">Pricing</a>
+			<a href="{{url_for('views.about_us')}}">About Us</a>
+		</div>
+		<div class="right-nav">
+
+
+
+			{% if current_user.is_authenticated %}
+				<a href="{{url_for('views.appointment')}}">Appointment</a>
+				<a href="{{url_for('views.forum')}}">Forum</a>
+				<details class="notification-details">
+					<summary class="notification-summary"><img
+							src="{{ url_for('static', filename='resources/bell_icon.png') }}" alt="Notifications"
+							class="notification-image"></summary>
+					<form class="notifications" method="POST" action="/clear_all_notifications">
+						<div class="notification-content">
+							{% if current_user.notifications %}
+								{% for notif in current_user.notifications[::-1] %}
+									<a href="{{notif.link}}">
+										<button class="notification-button" type="button">
+											<h3 style="margin: auto;">{{notif.title}}</h3>
+											<p style="font-size: .9rem;">{{notif.description}}</p>
+										</button>
+									</a>
+								{% endfor %}
+							{% else %}
+								<p style="color: var(--text-bg);">You have no notifications</p>
+							{% endif %}
+						</div>
+						<button type="button" id="mark-read" onClick="eraseAll(1)" method="POST">Mark all as read</button>
+					</form>
+				</details>
+				<a href="{{url_for('views.account')}}" class="account">
+					<div class="pfp1"></div>
+				</a>
+			{% else %}
+				{% block nav_bar_item %}
+					<a href="{{url_for('auth.sign_up')}}">Sign up</a>
+					<a href="{{url_for('auth.login')}}">Sign in</a>
+				{% endblock %}
+			{% endif %}
+		</div>
+
+	</nav>
+
+	<div id="outer-container">
+		{% block content %}
+		{% endblock %}
+	</div>
+
+
+	<footer>
+		<a href="#" class="footer-links">Terms and Conditions</a>
+		<a href="#" class="footer-links">Privacy policy</a>
+		<a href="{{url_for('views.contact_us')}}" class="footer-links">Report a problem</a>
+		<a href="{{url_for('views.contact_us')}}" class="footer-links">Contact us</a>
+		<a href="{{url_for('views.about_us')}}" class="footer-links">About us</a>
+	</footer>
+</body>
+
+</html>

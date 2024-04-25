@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %} Course {% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/course_finished.css">
+{% endblock %}
+
+{% block content %}
+
+<div id="inner-container">
+	<h1 style="color: green;">Congrats</h1>
+
+	<h2>You completed the course with a score of :</h2>
+	<h1>8/10</h1>
+	<h3>Rate course</h3>
+
+	<div class="controls">
+		<a href="{{url_for('views.home')}}"><button>
+				Back to my courses
+			</button></a>
+		<a href="#"><button>
+				Review my answers
+			</button></a>
+		<a href="#"><button>
+				More exercises
+			</button></a>
+	</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Activity information{% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/account.css">
+<link rel="stylesheet" href="../static/styles/activity_information.css">
+<script src="../static/script/activity_information.js"></script>
+{% endblock %}
+
+
+{% block content %}
+<details class="details">
+	<summary class="summary"><img src="../static/resources/hamburger_icon.png" alt="Show sidebar"></summary>
+	<div class="sidebar">
+		<div style="padding-bottom: 4rem;">
+			<div class="profile-area-sidebar">
+				<div class="profile-picture-sidebar"></div>
+				<h2>
+					{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+					{{current_user.first_name}} {{current_user.last_name}}
+					{% else %}
+					{{current_user.username}}
+					{% endif %}
+				</h2>
+			</div>
+
+			<a href="{{url_for('views.account')}}"><button>Account profile</button></a>
+			<a href="{{url_for('views.activity_information')}}"><button>Acitivity information</button></a>
+			<a href="{{url_for('views.appearance')}}"><button>Appearance</button></a>
+			<a href="{{url_for('views.email_prefs')}}"><button>Email preferences</button></a>
+			<a href="{{url_for('auth.logout')}}"><button>Logout</button></a>
+		</div>
+	</div>
+</details>
+
+<div class="sidebar normal-sidebar">
+	<div style="padding-bottom: 4rem;">
+		<div class="profile-area-sidebar">
+			<div class="profile-picture-sidebar"></div>
+			<h2>
+				{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+				{{current_user.first_name}} {{current_user.last_name}}
+				{% else %}
+				{{current_user.username}}
+				{% endif %}
+			</h2>
+		</div>
+
+		<a href="{{url_for('views.account')}}"><button>Account profile</button></a>
+		<a href="{{url_for('views.activity_information')}}"><button>Acitivity information</button></a>
+		<a href="{{url_for('views.appearance')}}"><button>Appearance</button></a>
+		<a href="{{url_for('views.email_prefs')}}"><button>Email preferences</button></a>
+		<a href="{{url_for('auth.logout')}}"><button>Logout</button></a>
+	</div>
+</div>
+
+<div class="fixed-shadow fixed-shadow-left"></div>
+
+
+
+<div id="main-container">
+	<h1>Activity information</h1>
+
+	<span class="profile-picture"></span>
+	<div class="inner-container-info">
+		<span class="main-title-container exclude">
+			<h1 class="main-title">
+				{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+					{{current_user.first_name}} {{current_user.last_name}}
+				{% else %}
+					{{current_user.username}}
+				{% endif %}
+			</h1>
+		</span>
+	</div>
+
+	<div id="tab">
+		<button class="tab-links" onclick="openCity(event, 'overview')">Overview</button>
+		<button class="tab-links" onclick="openCity(event, 'posts')">Posts</button>
+		<button class="tab-links" onclick="openCity(event, 'comments')">Comments</button>
+		<button class="tab-links" onclick="openCity(event, 'messages')">Messages</button>
+		<button class="tab-links" onclick="openCity(event, 'appointments')">Appointments</button>
+	</div>
+
+
+	<div id="overview" class="tabcontent default-tab">
+		<h2>Overview</h2>
+		<div id="stats">
+			<div class="overview-inner-divs">
+				<div class="stat">
+					<h3>Comments:</h3>
+					<h1>{{comments.count()}}</h1>
+				</div>
+				<div class="stat">
+					<h3>Posts:</h3>
+					<h1>{{posts.count()}}</h1>
+				</div>
+			</div>
+			<div class="overview-inner-divs">
+				<div class="stat">
+					<h3>Messages:</h3>
+					<h1>{{messages.count()}}</h1>
+				</div>
+				<div class="stat">
+					<h3 style="text-align: center; margin-bottom: 0;">Appointments<br>pending:</h3>
+					<h1>{{appointments.count()}}</h1>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="posts" class="tabcontent">
+		{% if posts %}
+			{% for post in posts[::-1] %}
+			<div class="item">
+				<h2 class="score" style="color: {{'var(--text-bg-sec) !important' if post.score == 0 else unset}};
+									color: {{'green' if post.score>-1 else 'red'}}">
+					{{post.score}}
+				</h2>
+				<a href="{{ url_for('views.post', post_id=post.id) }}">
+					<p>{{post.title}}</p>
+				</a>
+			</div>
+			<div class="hr"></div>
+			{% endfor %}
+		{% endif %}
+	</div>
+
+	<div id="comments" class="tabcontent">
+		{% if comments %}
+			{% for comment in comments[::-1] %}
+			<div class="item">
+				<h2 class="score" style="color: {{'var(--text-bg-sec) !important' if comment.score == 0 else unset}};
+									color: {{'green' if comment.score>-1 else 'red'}}">
+					{{comment.score}}
+				</h2>
+				<a href="{{ url_for('views.post', post_id=comment.post_id) }}">
+					<p>{{comment.content}}</p>
+				</a>
+			</div>
+			<div class="hr"></div>
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div id="messages" class="tabcontent">
+		{% if messages %}
+			{% for n, message in enumerate(messages[::-1], 1) %}
+			<div class="item">
+				<a href="#">
+					<div class="element">
+						<p style="color: var(--text-bg-sec);">{{n}}</p>
+						<p>{{message.phone_number}}</p>
+						<p>{{message.reason.replace("-", " ").capitalize()}}</p>
+						<p>{{message.title}}</p>
+						<p>{{message.message}}</p>
+					</div>
+				</a>
+			</div>
+			<div class="hr"></div>
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div id="appointments" class="tabcontent">
+		{% if appointments %}
+			{% for n, appointment in enumerate(appointments[::-1], 1) %}
+			<div class="item">
+				<a href="#">
+					<div class="element">
+						<p style="color: var(--text-bg-sec);">{{n}}</p>
+						<p>{{appointment.teacher_name}}</p>
+						<p>{{appointment.subject_name}}</p>
+						<p>{{appointment.description}}</p>
+						<p>{{appointment.date.strftime("%d/%m/%Y")}}</p>
+						<p>{{appointment.start_time.strftime("%H:%M")}}</p>
+						<p>{{appointment.end_time.strftime("%H:%M")}}</p>
+					</div>
+				</a>
+			</div>
+			<div class="hr"></div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
+<div class="fixed-shadow fixed-shadow-right"></div>
+
+{% endblock %}

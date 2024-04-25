@@ -1,0 +1,13 @@
+footer {
+	display: none;
+}
+
+
+.fixed-shadow {
+	flex: 1;
+}
+
+#inner-container {
+	flex: 5;
+	text-align: center;
+}

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Mathegramming’s documentation! &mdash; Mathegramming 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Mathegramming
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to Mathegramming’s documentation!</a></li>
+<li><a class="reference internal" href="#website-package">website package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-website.auth">website.auth module</a><ul>
+<li><a class="reference internal" href="#website.auth.change_password"><code class="docutils literal notranslate"><span class="pre">change_password()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.delete_account"><code class="docutils literal notranslate"><span class="pre">delete_account()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.forgot_password"><code class="docutils literal notranslate"><span class="pre">forgot_password()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.logout"><code class="docutils literal notranslate"><span class="pre">logout()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.reset_password"><code class="docutils literal notranslate"><span class="pre">reset_password()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.save_information"><code class="docutils literal notranslate"><span class="pre">save_information()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.sign_up"><code class="docutils literal notranslate"><span class="pre">sign_up()</span></code></a></li>
+<li><a class="reference internal" href="#website.auth.verify_code"><code class="docutils literal notranslate"><span class="pre">verify_code()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-website.models">website.models module</a><ul>
+<li><a class="reference internal" href="#website.models.Appointment"><code class="docutils literal notranslate"><span class="pre">Appointment</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.Appointment.date"><code class="docutils literal notranslate"><span class="pre">Appointment.date</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.description"><code class="docutils literal notranslate"><span class="pre">Appointment.description</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.end_time"><code class="docutils literal notranslate"><span class="pre">Appointment.end_time</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.id"><code class="docutils literal notranslate"><span class="pre">Appointment.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.start_time"><code class="docutils literal notranslate"><span class="pre">Appointment.start_time</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.subject_name"><code class="docutils literal notranslate"><span class="pre">Appointment.subject_name</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.teacher_name"><code class="docutils literal notranslate"><span class="pre">Appointment.teacher_name</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Appointment.user_id"><code class="docutils literal notranslate"><span class="pre">Appointment.user_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.Comment"><code class="docutils literal notranslate"><span class="pre">Comment</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.Comment.answer_for"><code class="docutils literal notranslate"><span class="pre">Comment.answer_for</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Comment.content"><code class="docutils literal notranslate"><span class="pre">Comment.content</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Comment.created"><code class="docutils literal notranslate"><span class="pre">Comment.created</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Comment.id"><code class="docutils literal notranslate"><span class="pre">Comment.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Comment.post_id"><code class="docutils literal notranslate"><span class="pre">Comment.post_id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Comment.score"><code class="docutils literal notranslate"><span class="pre">Comment.score</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Comment.user_id"><code class="docutils literal notranslate"><span class="pre">Comment.user_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.CommentReaction"><code class="docutils literal notranslate"><span class="pre">CommentReaction</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.CommentReaction.comment_id"><code class="docutils literal notranslate"><span class="pre">CommentReaction.comment_id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.CommentReaction.id"><code class="docutils literal notranslate"><span class="pre">CommentReaction.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.CommentReaction.user_id"><code class="docutils literal notranslate"><span class="pre">CommentReaction.user_id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.CommentReaction.vote"><code class="docutils literal notranslate"><span class="pre">CommentReaction.vote</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.Course"><code class="docutils literal notranslate"><span class="pre">Course</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.Course.id"><code class="docutils literal notranslate"><span class="pre">Course.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Course.title"><code class="docutils literal notranslate"><span class="pre">Course.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.EmbeddedCourse"><code class="docutils literal notranslate"><span class="pre">EmbeddedCourse</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.Message.id"><code class="docutils literal notranslate"><span class="pre">Message.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Message.message"><code class="docutils literal notranslate"><span class="pre">Message.message</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Message.phone_number"><code class="docutils literal notranslate"><span class="pre">Message.phone_number</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Message.reason"><code class="docutils literal notranslate"><span class="pre">Message.reason</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Message.title"><code class="docutils literal notranslate"><span class="pre">Message.title</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Message.user_id"><code class="docutils literal notranslate"><span class="pre">Message.user_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.Notification"><code class="docutils literal notranslate"><span class="pre">Notification</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.Notification.description"><code class="docutils literal notranslate"><span class="pre">Notification.description</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Notification.id"><code class="docutils literal notranslate"><span class="pre">Notification.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Notification.link"><code class="docutils literal notranslate"><span class="pre">Notification.link</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Notification.received"><code class="docutils literal notranslate"><span class="pre">Notification.received</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Notification.title"><code class="docutils literal notranslate"><span class="pre">Notification.title</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Notification.user_id"><code class="docutils literal notranslate"><span class="pre">Notification.user_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.Post"><code class="docutils literal notranslate"><span class="pre">Post</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.Post.category"><code class="docutils literal notranslate"><span class="pre">Post.category</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.comments"><code class="docutils literal notranslate"><span class="pre">Post.comments</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.content"><code class="docutils literal notranslate"><span class="pre">Post.content</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.created"><code class="docutils literal notranslate"><span class="pre">Post.created</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.id"><code class="docutils literal notranslate"><span class="pre">Post.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.score"><code class="docutils literal notranslate"><span class="pre">Post.score</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.subject"><code class="docutils literal notranslate"><span class="pre">Post.subject</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.title"><code class="docutils literal notranslate"><span class="pre">Post.title</span></code></a></li>
+<li><a class="reference internal" href="#website.models.Post.user_id"><code class="docutils literal notranslate"><span class="pre">Post.user_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.PostReaction"><code class="docutils literal notranslate"><span class="pre">PostReaction</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.PostReaction.id"><code class="docutils literal notranslate"><span class="pre">PostReaction.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.PostReaction.post_id"><code class="docutils literal notranslate"><span class="pre">PostReaction.post_id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.PostReaction.user_id"><code class="docutils literal notranslate"><span class="pre">PostReaction.user_id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.PostReaction.vote"><code class="docutils literal notranslate"><span class="pre">PostReaction.vote</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.TextCourse"><code class="docutils literal notranslate"><span class="pre">TextCourse</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.User.account_type"><code class="docutils literal notranslate"><span class="pre">User.account_type</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.birthday"><code class="docutils literal notranslate"><span class="pre">User.birthday</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.comment_reactions"><code class="docutils literal notranslate"><span class="pre">User.comment_reactions</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.comments"><code class="docutils literal notranslate"><span class="pre">User.comments</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.created"><code class="docutils literal notranslate"><span class="pre">User.created</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.description"><code class="docutils literal notranslate"><span class="pre">User.description</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.first_name"><code class="docutils literal notranslate"><span class="pre">User.first_name</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.gender"><code class="docutils literal notranslate"><span class="pre">User.gender</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.last_name"><code class="docutils literal notranslate"><span class="pre">User.last_name</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.notifications"><code class="docutils literal notranslate"><span class="pre">User.notifications</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.password"><code class="docutils literal notranslate"><span class="pre">User.password</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.phone_number"><code class="docutils literal notranslate"><span class="pre">User.phone_number</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.post_reactions"><code class="docutils literal notranslate"><span class="pre">User.post_reactions</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.posts"><code class="docutils literal notranslate"><span class="pre">User.posts</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.region"><code class="docutils literal notranslate"><span class="pre">User.region</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.settings"><code class="docutils literal notranslate"><span class="pre">User.settings</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.two_FA"><code class="docutils literal notranslate"><span class="pre">User.two_FA</span></code></a></li>
+<li><a class="reference internal" href="#website.models.User.username"><code class="docutils literal notranslate"><span class="pre">User.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.UserSettings"><code class="docutils literal notranslate"><span class="pre">UserSettings</span></code></a><ul>
+<li><a class="reference internal" href="#website.models.UserSettings.activity_emails"><code class="docutils literal notranslate"><span class="pre">UserSettings.activity_emails</span></code></a></li>
+<li><a class="reference internal" href="#website.models.UserSettings.id"><code class="docutils literal notranslate"><span class="pre">UserSettings.id</span></code></a></li>
+<li><a class="reference internal" href="#website.models.UserSettings.promotional_emails"><code class="docutils literal notranslate"><span class="pre">UserSettings.promotional_emails</span></code></a></li>
+<li><a class="reference internal" href="#website.models.UserSettings.security_emails"><code class="docutils literal notranslate"><span class="pre">UserSettings.security_emails</span></code></a></li>
+<li><a class="reference internal" href="#website.models.UserSettings.user_id"><code class="docutils literal notranslate"><span class="pre">UserSettings.user_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#website.models.VideoCourse"><code class="docutils literal notranslate"><span class="pre">VideoCourse</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-website.views">website.views module</a><ul>
+<li><a class="reference internal" href="#website.views.about_us"><code class="docutils literal notranslate"><span class="pre">about_us()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.account"><code class="docutils literal notranslate"><span class="pre">account()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.activity_information"><code class="docutils literal notranslate"><span class="pre">activity_information()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.appearance"><code class="docutils literal notranslate"><span class="pre">appearance()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.appointment"><code class="docutils literal notranslate"><span class="pre">appointment()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.appointment_finalized"><code class="docutils literal notranslate"><span class="pre">appointment_finalized()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.clear_all_notifications"><code class="docutils literal notranslate"><span class="pre">clear_all_notifications()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.comment_vote"><code class="docutils literal notranslate"><span class="pre">comment_vote()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.contact_us"><code class="docutils literal notranslate"><span class="pre">contact_us()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.contact_us_finalized"><code class="docutils literal notranslate"><span class="pre">contact_us_finalized()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.course_finished"><code class="docutils literal notranslate"><span class="pre">course_finished()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.create_post"><code class="docutils literal notranslate"><span class="pre">create_post()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.default"><code class="docutils literal notranslate"><span class="pre">default()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.email_prefs"><code class="docutils literal notranslate"><span class="pre">email_prefs()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.embedded_course"><code class="docutils literal notranslate"><span class="pre">embedded_course()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.exercises"><code class="docutils literal notranslate"><span class="pre">exercises()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.forum"><code class="docutils literal notranslate"><span class="pre">forum()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.get_filter"><code class="docutils literal notranslate"><span class="pre">get_filter()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.get_pretty_date_delta"><code class="docutils literal notranslate"><span class="pre">get_pretty_date_delta()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.home"><code class="docutils literal notranslate"><span class="pre">home()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.post"><code class="docutils literal notranslate"><span class="pre">post()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.post_vote"><code class="docutils literal notranslate"><span class="pre">post_vote()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.pricing"><code class="docutils literal notranslate"><span class="pre">pricing()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.text_course"><code class="docutils literal notranslate"><span class="pre">text_course()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.video_course"><code class="docutils literal notranslate"><span class="pre">video_course()</span></code></a></li>
+<li><a class="reference internal" href="#website.views.write"><code class="docutils literal notranslate"><span class="pre">write()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-website">Module contents</a><ul>
+<li><a class="reference internal" href="#website.create_app"><code class="docutils literal notranslate"><span class="pre">create_app()</span></code></a></li>
+<li><a class="reference internal" href="#website.create_database"><code class="docutils literal notranslate"><span class="pre">create_database()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Mathegramming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to Mathegramming’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-mathegramming-s-documentation">
+<h1>Welcome to Mathegramming’s documentation!<a class="headerlink" href="#welcome-to-mathegramming-s-documentation" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="website-package">
+<h1>website package<a class="headerlink" href="#website-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-website.auth">
+<span id="website-auth-module"></span><h2>website.auth module<a class="headerlink" href="#module-website.auth" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.change_password">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">change_password</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/auth.html#change_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.change_password" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the change_password.html page from the account.html page,
+which asks for the user’s current password and their new password.
+If everything checks out, the old password is replaced by the new one.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.delete_account">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">delete_account</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/auth.html#delete_account"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.delete_account" title="Permalink to this definition"></a></dt>
+<dd><p>Delete account view function. Renders the delete account page and
+checks inputted information. If it matches, it removes the User’s settings,
+the users notifications and the account itself from the DB and redirects the user to first_page.html.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.forgot_password">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">forgot_password</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/auth.html#forgot_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.forgot_password" title="Permalink to this definition"></a></dt>
+<dd><p>Unfinished function. Renders the forget_password.html page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.get">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/website/auth.html#get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.get" title="Permalink to this definition"></a></dt>
+<dd><p>Shorthand for request.form.get().</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.login">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/auth.html#login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.login" title="Permalink to this definition"></a></dt>
+<dd><p>Login view function. Renders the login page (sign_in.html)
+and gets all the values of the input elements in the form,
+gets the user in DB by username and checks the password. Logs-in the user if
+it matches, flash() an error if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.logout">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/auth.html#logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.logout" title="Permalink to this definition"></a></dt>
+<dd><p>Logout view function. Logs-out the user from flask-login and redirects the user to the first_page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.reset_password">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">reset_password</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/auth.html#reset_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.reset_password" title="Permalink to this definition"></a></dt>
+<dd><p>Unfinished function. Similar to auth.change_password (next function).
+Renders the reset_password.html page and would let the user change their password
+after having verified their identity by sending them an verification code via email.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.save_information">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">save_information</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/auth.html#save_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.save_information" title="Permalink to this definition"></a></dt>
+<dd><p>This function saves the account information
+that the user might have changed in the account.html page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.sign_up">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">sign_up</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/auth.html#sign_up"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.sign_up" title="Permalink to this definition"></a></dt>
+<dd><p>Sign up view function. Renders the sign-up page (sign_up.html) and
+if post request, gets the form elements’s values, checks format of
+email address, username and both passwords. If everything checks out,
+it creates a new User in database and also a UserSettings row associated
+the User.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.auth.verify_code">
+<span class="sig-prename descclassname"><span class="pre">website.auth.</span></span><span class="sig-name descname"><span class="pre">verify_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/auth.html#verify_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.auth.verify_code" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the verify_code.html page.</p>
+</dd></dl>
+
+</section>
+<section id="module-website.models">
+<span id="website-models-module"></span><h2>website.models module<a class="headerlink" href="#module-website.models" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.Appointment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">Appointment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#Appointment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.Appointment" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Appointment object.</p>
+<p>Attributes
+-
+* id: Optional[int] - the id of the Appointment in the db (auto-generated by the DB).
+* user_id: int - the id of the user who scheduled the Appointment.
+* teacher_name: str - Name of the teacher that was selected for the appointment.
+* subject_name: str[“all”, “mathematics”, “physics”, “programming”, “other”] - Name of the subject the teacher is going to cover.
+* description: str - Small description of what the objectives for the appointment is or
+which specific field is to be covered.
+* date: datetime.date = Due date of the appointment
+* start_time: datetime.time = Start time of the appointment
+* end_time: datetime.time = End time of the appointment</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.date">
+<span class="sig-name descname"><span class="pre">date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">date</span></em><a class="headerlink" href="#website.models.Appointment.date" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Appointment.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.end_time">
+<span class="sig-name descname"><span class="pre">end_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">time</span></em><a class="headerlink" href="#website.models.Appointment.end_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.Appointment.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.start_time">
+<span class="sig-name descname"><span class="pre">start_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">time</span></em><a class="headerlink" href="#website.models.Appointment.start_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.subject_name">
+<span class="sig-name descname"><span class="pre">subject_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Appointment.subject_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.teacher_name">
+<span class="sig-name descname"><span class="pre">teacher_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Appointment.teacher_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Appointment.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#website.models.Appointment.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.Comment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">Comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#Comment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.Comment" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Comment object for posts.</p>
+<p>Attributes
+-</p>
+<ul class="simple">
+<li><p>id: Optional[int] - the id of the comment in the db.</p></li>
+<li><p>user_id: int - the id of the user who created the comment.</p></li>
+<li><p>post_id: int - the id of the post on with which the comment is associated.</p></li>
+<li><p>score: int - total score (can be either positive or negative).</p></li>
+<li><p>content: str - content of the comment.</p></li>
+<li><p>answer_for: int - id of the comment that this comment is replying to</p></li>
+</ul>
+<p>(CAUTION, placeholder value post_id is being fed to this attribute in views.post).
+* created: datetime.datetime - date &amp; time of creation (auto-generated by the DB).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.answer_for">
+<span class="sig-name descname"><span class="pre">answer_for</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Comment.answer_for" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Comment.content" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#website.models.Comment.created" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.Comment.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.post_id">
+<span class="sig-name descname"><span class="pre">post_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Comment.post_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.score">
+<span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Comment.score" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Comment.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Comment.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.CommentReaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">CommentReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#CommentReaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.CommentReaction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Likes and dislikes for Comment objects.</p>
+<p>Attributes
+-</p>
+<ul class="simple">
+<li><p>id: Optional[int] - the id of the CommentReaction in the db (auto-generated by the DB).</p></li>
+<li><p>user_id: int - the id of the user who posted a Reaction (Inherited from Reaction).</p></li>
+<li><p>comment_id: int - The id of the comment associated with the Reaction.</p></li>
+<li><p>vote: int[1, -1] - A like or a dislike (Inherited from Reaction).</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.CommentReaction.comment_id">
+<span class="sig-name descname"><span class="pre">comment_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.CommentReaction.comment_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.CommentReaction.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.CommentReaction.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.CommentReaction.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.CommentReaction.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.CommentReaction.vote">
+<span class="sig-name descname"><span class="pre">vote</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.CommentReaction.vote" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.Course">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">Course</span></span><a class="reference internal" href="_modules/website/models.html#Course"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.Course" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Course.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Column(None,</span> <span class="pre">Integer(),</span> <span class="pre">table=None,</span> <span class="pre">primary_key=True,</span> <span class="pre">nullable=False)</span></em><a class="headerlink" href="#website.models.Course.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Course.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Column(None,</span> <span class="pre">Text(),</span> <span class="pre">table=None)</span></em><a class="headerlink" href="#website.models.Course.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.EmbeddedCourse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">EmbeddedCourse</span></span><a class="reference internal" href="_modules/website/models.html#EmbeddedCourse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.EmbeddedCourse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="website.html#website.models.Course" title="website.models.Course"><code class="xref py py-class docutils literal notranslate"><span class="pre">Course</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.Message">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#Message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.Message" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Message object.</p>
+<p>Attributes
+-
+* id: Optional[int] - the id of the Message in the db (auto-generated by the DB).
+* user_id: int - the id of the user who sent the Message.
+* phone_number: int - phone number of the user.
+* reason: str - purpose of the message.
+* title: str - title of the message.
+* message: str - the message.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Message.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.Message.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Message.message">
+<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Message.message" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Message.phone_number">
+<span class="sig-name descname"><span class="pre">phone_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Message.phone_number" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Message.reason">
+<span class="sig-name descname"><span class="pre">reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Message.reason" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Message.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Message.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Message.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Message.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.Notification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">Notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#Notification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.Notification" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Notification object.</p>
+<p>Attributes
+-
+* id: Optional[int] - the id of the Notification in the db (auto-generated by the DB).
+* user_id: int - the id of the user to who the Notification is associated.
+* title: str - the title of the Notification
+* description: str - the description of the Notification
+* link: str - the link of the Notification (where the Notification should bring the user on click)
+* received: datetime.datetime - receival date (auto-generated by the DB).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Notification.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Notification.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Notification.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.Notification.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Notification.link">
+<span class="sig-name descname"><span class="pre">link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Notification.link" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Notification.received">
+<span class="sig-name descname"><span class="pre">received</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#website.models.Notification.received" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Notification.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Notification.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Notification.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Notification.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.Post">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">Post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#Post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.Post" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Post object.</p>
+<p>Attributes
+-</p>
+<ul class="simple">
+<li><p>id: Optional[int] - the id of the post in the db (auto-generated by the DB).</p></li>
+<li><p>user_id: int - the id of the user who created the post.</p></li>
+<li><p>title: str - the title of the post.</p></li>
+<li><p>content: str - content of the comment.</p></li>
+<li><p>score: int - total score (can be either positive or negative).</p></li>
+<li><p>category: str[“all”, “ask”, “news”, “discussion”, “bug”, “other”] - category</p></li>
+<li><p>subject: str[“all”, “mathematics”, “physics”, “programming”, “other”] - subject</p></li>
+<li><p>created: datetime.datetime - date &amp; time of creation (auto-generated by the DB).</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.category">
+<span class="sig-name descname"><span class="pre">category</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Post.category" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><a class="headerlink" href="#website.models.Post.comments" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Post.content" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#website.models.Post.created" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.Post.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.score">
+<span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.Post.score" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Post.subject" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.Post.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.Post.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#website.models.Post.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.PostReaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">PostReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#PostReaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.PostReaction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Likes and dislikes for Post objects.</p>
+<p>Attributes
+-</p>
+<ul class="simple">
+<li><p>id: Optional[int] - the id of the PostReaction in the db (auto-generated by the DB).</p></li>
+<li><p>user_id: int - the id of the user who posted a Reaction - (Inherited from Reaction).</p></li>
+<li><p>post_id: int - The id of the post associated with the Reaction.</p></li>
+<li><p>vote: int[1, -1] - A like or a dislike - (Inherited from Reaction).</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.PostReaction.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.PostReaction.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.PostReaction.post_id">
+<span class="sig-name descname"><span class="pre">post_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.PostReaction.post_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.PostReaction.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.PostReaction.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.PostReaction.vote">
+<span class="sig-name descname"><span class="pre">vote</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.PostReaction.vote" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.TextCourse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">TextCourse</span></span><a class="reference internal" href="_modules/website/models.html#TextCourse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.TextCourse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="website.html#website.models.Course" title="website.models.Course"><code class="xref py py-class docutils literal notranslate"><span class="pre">Course</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#User"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.User" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UserMixin</span></code></p>
+<p>User object.</p>
+<p>Attributes
+-
+* id: Optional[int] - the id of the User in the db (auto-generated by the DB).
+* email: str - email of the user
+* password: str - password of the user
+* two_FA: bool - whether the user has 2-Factor Authentication (phone number required)
+* account_type: str - account_type of the user
+* first_name: Optional[str] - first name of user
+* last_name: Optional[str] - last name of user
+* birthday: Optional[str] | Optional[datetime.datetime] - birthday of the user
+* gender: Optional[str] - gender of the user
+* phone_number: Optional[int] - phone_number of the user
+* Region: Optional[str] - Region of the user
+* created: Optional[datetime.datetime] - date &amp; time of creation (auto-generated by the DB).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.account_type">
+<span class="sig-name descname"><span class="pre">account_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.User.account_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.birthday">
+<span class="sig-name descname"><span class="pre">birthday</span></span><a class="headerlink" href="#website.models.User.birthday" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.comment_reactions">
+<span class="sig-name descname"><span class="pre">comment_reactions</span></span><a class="headerlink" href="#website.models.User.comment_reactions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><a class="headerlink" href="#website.models.User.comments" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#website.models.User.created" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.User.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.email">
+<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.User.email" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.first_name">
+<span class="sig-name descname"><span class="pre">first_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.User.first_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.gender">
+<span class="sig-name descname"><span class="pre">gender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.User.gender" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.User.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.last_name">
+<span class="sig-name descname"><span class="pre">last_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.User.last_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.notifications">
+<span class="sig-name descname"><span class="pre">notifications</span></span><a class="headerlink" href="#website.models.User.notifications" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.User.password" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.phone_number">
+<span class="sig-name descname"><span class="pre">phone_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.User.phone_number" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.post_reactions">
+<span class="sig-name descname"><span class="pre">post_reactions</span></span><a class="headerlink" href="#website.models.User.post_reactions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.posts">
+<span class="sig-name descname"><span class="pre">posts</span></span><a class="headerlink" href="#website.models.User.posts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.region">
+<span class="sig-name descname"><span class="pre">region</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.User.region" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.settings">
+<span class="sig-name descname"><span class="pre">settings</span></span><a class="headerlink" href="#website.models.User.settings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.two_FA">
+<span class="sig-name descname"><span class="pre">two_FA</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#website.models.User.two_FA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.User.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#website.models.User.username" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.UserSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">UserSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/website/models.html#UserSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.UserSettings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>UserSettings object.
+Attributes
+-
+* id: Optional[int] - the id of the UserSettings in the db (auto-generated by the DB).
+* user_id: int - the id of the user to who the UserSettings is associated.
+* security_emails: int[1, 0] - Whether to send security emails.
+* activity_emails: int[1, 0] - Whether to send activity emails.
+* promotional_emails: int[1, 0] - Whether to send promotional emails.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.UserSettings.activity_emails">
+<span class="sig-name descname"><span class="pre">activity_emails</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.UserSettings.activity_emails" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.UserSettings.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#website.models.UserSettings.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.UserSettings.promotional_emails">
+<span class="sig-name descname"><span class="pre">promotional_emails</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.UserSettings.promotional_emails" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.UserSettings.security_emails">
+<span class="sig-name descname"><span class="pre">security_emails</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.UserSettings.security_emails" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="website.models.UserSettings.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#website.models.UserSettings.user_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="website.models.VideoCourse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">website.models.</span></span><span class="sig-name descname"><span class="pre">VideoCourse</span></span><a class="reference internal" href="_modules/website/models.html#VideoCourse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.models.VideoCourse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="website.html#website.models.Course" title="website.models.Course"><code class="xref py py-class docutils literal notranslate"><span class="pre">Course</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-website.views">
+<span id="website-views-module"></span><h2>website.views module<a class="headerlink" href="#module-website.views" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.about_us">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">about_us</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#about_us"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.about_us" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the about_us.html page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.account">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">account</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#account"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.account" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the account.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.activity_information">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">activity_information</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#activity_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.activity_information" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the activity_information.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.appearance">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">appearance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#appearance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.appearance" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the appearance.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.appointment">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">appointment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#appointment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.appointment" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the appointment.html page and creates an Appointment object in DB and a Notification</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.appointment_finalized">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">appointment_finalized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#appointment_finalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.appointment_finalized" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the appointment_finalized.html page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.clear_all_notifications">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">clear_all_notifications</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#clear_all_notifications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.clear_all_notifications" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes all of the User’s Notifications from DB</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.comment_vote">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">comment_vote</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/website/views.html#comment_vote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.comment_vote" title="Permalink to this definition"></a></dt>
+<dd><p>Handles comments impressions (like/dislikes).
+It is probably possible to merge comment_vote and post_vote together
+and/or make a decorator function, since they are both similar to each other.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.contact_us">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">contact_us</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#contact_us"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.contact_us" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the contact_us.html page and creates a Message object in DB and a Notification</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.contact_us_finalized">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">contact_us_finalized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#contact_us_finalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.contact_us_finalized" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the contact_us_finalized.html page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.course_finished">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">course_finished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#course_finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.course_finished" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the course_finished.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.create_post">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">create_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#create_post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.create_post" title="Permalink to this definition"></a></dt>
+<dd><p>Renders create_post.html and creates posts and a notification
+to notify the user that their post has successfully been created.
+It then redirects to views.forum</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.default">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.default" title="Permalink to this definition"></a></dt>
+<dd><p>Redirects to the views.home function.</p>
+<p>It’s purpose is to not throw a 404 error when going to <a class="reference external" href="http://127.0.0.1:5000/">http://127.0.0.1:5000/</a>.</p>
+<p>-&gt; <a class="reference external" href="http://127.0.0.1:5000/">http://127.0.0.1:5000/</a> = <a class="reference external" href="http://127.0.0.1:5000/home">http://127.0.0.1:5000/home</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.email_prefs">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">email_prefs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#email_prefs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.email_prefs" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the emails_prefs.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.embedded_course">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">embedded_course</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#embedded_course"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.embedded_course" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the embedded_course.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.exercises">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">exercises</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#exercises"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.exercises" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the exercises.html page if user is logged-in.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.forum">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">forum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#forum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.forum" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the forum.html page and manages the post request sent by filters and search.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.get">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/website/views.html#get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.get" title="Permalink to this definition"></a></dt>
+<dd><p>Shorthand for request.form.get()</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.get_filter">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">get_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/website/views.html#get_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.get_filter" title="Permalink to this definition"></a></dt>
+<dd><p>This function generates a dict object that matches the expected values in forum.html</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.get_pretty_date_delta">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">get_pretty_date_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">timedelta</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#get_pretty_date_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.get_pretty_date_delta" title="Permalink to this definition"></a></dt>
+<dd><p>Function that accepts a type timedelta and returns a readable time difference.</p>
+<p>Feel free to rename or reassign function as name is quite long.
+Ex:
+-&gt; get_pretty_date_delta(timedelta(seconds=54))</p>
+<p>-&gt; “A few seconds ago”</p>
+<p>-&gt; get_pretty_date_delta(timedelta(hours=48))</p>
+<p>-&gt; “2 days ago”</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.home">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#home"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.home" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the home.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.post">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">post_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/website/views.html#post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.post" title="Permalink to this definition"></a></dt>
+<dd><p>Renders post.html where the path is the id and also manages comment’s posting on the post.</p>
+<p>Ex: The page’s URL for a post, which id is 3, will be <a class="reference external" href="http://127.0.0.1:5000/post/3">http://127.0.0.1:5000/post/3</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.post_vote">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">post_vote</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/website/views.html#post_vote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.post_vote" title="Permalink to this definition"></a></dt>
+<dd><p>Handles post impressions (like/dislikes).
+It is probably possible to merge comment_vote and post_vote together
+and/or make a decorator function, since they are both similar to each other.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.pricing">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">pricing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#pricing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.pricing" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the pricing.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.text_course">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">text_course</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#text_course"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.text_course" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the text_course.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.video_course">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">video_course</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/website/views.html#video_course"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.video_course" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the video_course.html page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.views.write">
+<span class="sig-prename descclassname"><span class="pre">website.views.</span></span><span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request:</span> <span class="pre">~typing.Any</span> <span class="pre">=</span> <span class="pre">&lt;LocalProxy</span> <span class="pre">unbound&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/website/views.html#write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.views.write" title="Permalink to this definition"></a></dt>
+<dd><p>Function to write anything in instance/text.txt.</p>
+</dd></dl>
+
+</section>
+<section id="module-website">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-website" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="website.create_app">
+<span class="sig-prename descclassname"><span class="pre">website.</span></span><span class="sig-name descname"><span class="pre">create_app</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Flask</span></span></span><a class="reference internal" href="_modules/website.html#create_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.create_app" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="website.create_database">
+<span class="sig-prename descclassname"><span class="pre">website.</span></span><span class="sig-name descname"><span class="pre">create_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/website.html#create_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#website.create_database" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Lancelot Tariot Camille.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

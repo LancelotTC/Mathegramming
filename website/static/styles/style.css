@@ -1,0 +1,319 @@
+:root {
+	/* Background color of things */
+	--bg: white;
+	/* Secondary background color */
+	--bg-sec: #eee;
+
+	/* Primary color of text (usually the inverse of --bg). Designed to go above --bg.  */
+	--text-bg: black;
+	/* Either white or black depending on --fg. Color for text with --fg background */
+	--text-bg-inv: white;
+	/* Input's and textarea's placeholders and greyed out text */
+	--text-bg-sec: grey;
+
+	/* Theme color */
+	--fg: #00797d;
+	/* Theme color on hover*/
+	--fg-h: #016367;
+
+	/* Active color */
+	--ac: #04AA6D;
+	/* Active color on hover */
+	--ac-h: #048757;
+}
+
+
+
+* {
+	font-family: Arial Regular;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: var(--bg);
+	margin: 0;
+	overflow-x: hidden;
+
+	/* Padding-top because of navbar */
+	padding-top: 4rem;
+	min-height: calc(100vh - 4rem);
+}
+
+#outer-container {
+	min-width: 100vw;
+	min-height: calc(100vh - 4rem);
+}
+
+input,
+button,
+textarea {
+	font-size: 1.1rem;
+
+	padding: .625em;
+}
+
+/* All text elements. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label,
+a,
+ul {
+	color: var(--text-bg);
+}
+
+button {
+	background-color: var(--fg);
+	color: var(--text-bg);
+	border: 0;
+	transition: .2s ease-in-out;
+	cursor: pointer;
+}
+
+
+
+button[type="submit"],
+.hover-style {
+	border: solid var(--fg) .3em;
+}
+
+button[type="submit"]:hover,
+.hover-style:hover {
+	background-color: var(--ac);
+}
+
+input,
+textarea,
+select {
+	color: var(--text-bg);
+	background-color: var(--bg);
+	border: solid var(--bg) .2em;
+	transition: .2s ease-in-out;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+	border-color: var(--ac);
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+	color: var(--text-bg-sec);
+}
+
+select {
+	border: solid var(--fg) .3em;
+	font-size: 1.1rem;
+	padding: .625rem;
+}
+
+textarea {
+	resize: none;
+}
+
+input,
+textarea {
+	border: solid var(--fg) .3em;
+	outline: none;
+}
+
+.topnav {
+	background-color: var(--fg);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: space-between;
+	z-index: 5;
+	flex-wrap: nowrap;
+	white-space: nowrap;
+
+	/* Change first visible to scroll! */
+	overflow: visible visible;
+}
+
+.topnav::-webkit-scrollbar {
+	display: none;
+}
+
+a {
+	text-decoration: underline;
+}
+
+a:visited {
+	color: var(--fg);
+}
+
+.topnav a,
+footer a,
+.notification-summary {
+	color: var(--bg);
+	text-align: center;
+	padding: 1.25rem;
+	text-decoration: none;
+	font-size: 1.25rem;
+}
+
+.main-logo {
+	height: 2rem;
+}
+
+.right-nav,
+.left-nav {
+	display: flex;
+}
+
+.notifications {
+	/* position: absolute; */
+	left: 80%;
+	right: 0%;
+	min-height: 70vh;
+	max-height: 70vh;
+	background-color: var(--bg);
+	border: solid var(--fg) .3em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.notifications::-webkit-scrollbar {
+	display: none;
+}
+
+.notification-details {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.notification-summary {
+	color: var(--bg);
+	padding: 1rem 1.25rem;
+	list-style: none;
+}
+
+.notification-summary:hover {
+	background-color: var(--fg);
+}
+
+.notification-image {
+	max-height: 1.75rem;
+}
+
+.notification-content {
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	align-items: center;
+	overflow-y: auto;
+	width: 100%;
+	z-index: 10;
+}
+
+.notification-button {
+	width: 100%;
+	height: fit-content;
+	background-color: var(--bg);
+	margin: 0;
+	text-align: center;
+	border-width: 1px 0px;
+	border-color: black;
+	z-index: 11;
+}
+
+.notification-button * {
+	color: var(--text-bg);
+	width: 100%;
+	white-space: normal;
+}
+
+.notifications a {
+	width: 100%;
+	padding: 0;
+}
+
+#mark-read {
+	color: var(--text-bg-inv);
+	margin: 0;
+	border: 0;
+	width: 100%;
+}
+
+.topnav a:hover,
+footer a:hover {
+	background-color: var(--fg-h);
+}
+
+a.active {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--ac);
+	color: var(--bg);
+	padding: 0 .6rem;
+}
+
+
+.active:active {
+	background-color: var(--ac-h);
+}
+
+.active:hover {
+	color: var(--ac);
+
+}
+
+a.account {
+	display: flex;
+	align-items: center;
+	padding: .9rem;
+}
+
+.pfp1 {
+	border-radius: 50%;
+	background-color: var(--bg);
+	width: 2rem;
+	height: 2rem;
+}
+
+
+
+
+
+footer {
+	position: relative;
+	margin-top: 5rem;
+	width: 100vw;
+	background-color: var(--fg);
+	display: flex;
+	justify-content: space-evenly;
+}
+
+footer a {
+	width: 100%;
+}
+
+@media (orientation: portrait) {
+	footer {
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 1000px) {
+	.notifications {
+		left: 50%;
+	}
+}
+
+a.footer-links {
+	color: var(--bg);
+}

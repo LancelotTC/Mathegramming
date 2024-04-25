@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Forgot password {% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/authentication.css">
+<link rel="stylesheet" href="../static/styles/forgot_password.css">
+{% endblock %}
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {%endblock %}
+
+{% block content %}
+
+<form class="inner-container" style="max-width: 20%;" method="POST">
+	<h1>Verification code</h1>
+	<p>Enter the verification code that was sent to your email address. It will expire in 10 minutes.</p>
+	<input type="text" placeholder="Ex: FDS-ALR-NVC" style="text-align: center;">
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				{% if category == "error" %}
+					<p class="alert">{{ message }}</p>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	<a href="{{url_for('auth.reset_password')}}"><button type="submit">Confirm verification code</button></a>
+</form>
+
+
+{% endblock %}

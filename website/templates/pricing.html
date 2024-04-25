@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Pricing{% endblock %}
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="../static/styles/pricing.css">
+{% endblock %}
+
+{% block content %}
+<div id="inner-container">
+	<!-- <div class="container" style='{{"border: solid var(--fg) .3rem" if current_user.account_type == "student" else "none" }}'>
+		<div>
+			<h1 style="margin-bottom: .6rem;">Free plan</h1>
+			<hr>
+		</div>
+		<p class="price">FREE</p>
+		<p style="opacity: 0; display:none;">placeholder</p>
+		<ul>
+			<li>Standard access to courses</li>
+		</ul>
+		<button style="color: grey; background-color: white; cursor: default;">Current plan</button>
+	</div> -->
+	<div class="container"
+		style='{{"border: solid var(--fg) .3rem" if current_user.account_type == "monthly" else "none" }}'>
+		<div>
+			<h1 style="margin-bottom: .6rem;">Monthly plan</h1>
+			<hr>
+		</div>
+		<p class="price">Rs. 899</p>
+		<p style="opacity: 0; display:none;">placeholder</p>
+		<ul>
+			<li>Advanced access to in-depth courses</li>
+			<li>Access to personal mentoring</li>
+		</ul>
+		<button style="color: var(--text-bg-inv);">Upgrade</button>
+	</div>
+	<div class="container"
+		style='{{"border: solid var(--fg) .3rem" if current_user.account_type == "annual" else "none" }}'>
+		<div>
+			<h1 style="margin-bottom: .6rem;">Annual plan</h1>
+			<hr>
+		</div>
+		<p class="price">Rs. 8999</p>
+		<p style="opacity: 0; display:none;">placeholder</p>
+		<ul>
+			<li>More economical than monthly plan</li>
+			<li>Advanced access to in-depth courses</li>
+			<li>Access to personal mentoring</li>
+		</ul>
+		<button style="color: var(--text-bg-inv);">Upgrade</button>
+	</div>
+</div>
+{% endblock %}

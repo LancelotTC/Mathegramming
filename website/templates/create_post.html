@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block title %}Take appointment{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/create_post.css">
+{% endblock %}
+{% block content %}
+<h1>Create a post</h1>
+
+<form class="main-container" method="POST">
+	<div class="container">
+		<h3>1. Title</h3>
+		<p>Be specific and imagine you're asking a question to another person.</p>
+		<input type="text" name="title" placeholder="Title" maxlength="70" required>
+	</div>
+
+	<div class="container">
+		<h3>2. Categories & tags</h3>
+		<p>Provide categories and tags so that other people can find them.</p>
+		<div class="container tagging">
+			<select name="category" id="" required>
+				<option value="default">Select category</option>
+				<option value="news">Announce news</option>
+				<option value="ask">Ask a question</option>
+				<option value="discussion">Discuss a topic</option>
+				<option value="bug">Showcase a bug</option>
+				<option value="other">Something else</option>
+			</select>
+			<select name="subject" id="" required>
+				<option value="default">Select subject</option>
+				<option value="All">All</option>
+				<option value="Mathematics">Mathematics</option>
+				<option value="Physics">Physics</option>
+				<option value="Programming">Programming</option>
+				<option value="other">Something else</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="container">
+		<h3>3. Description</h3>
+		<p>Introduce the problem and expand on what you put in the title. Minimum 20 characters.</p>
+		<textarea name="content" id="" cols="30" rows="10" placeholder="Description" required></textarea>
+	</div>
+
+	<button type="submit" id="create-post">Create post</button>
+</form>
+
+<div class="side-container">
+
+</div>
+
+
+{% endblock %}

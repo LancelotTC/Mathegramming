@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+
+{% block title %}Thank you for your time{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/contact_us.css">
+<link rel="stylesheet" href="../static/styles/contact_us_finalized.css">
+{% endblock %}
+{% block content %}
+<h1>Thank you for your time</h1>
+<h2>Your message was successfully sent. You will get an answer in 2 under working days.</h2>
+<a href="{{url_for('views.home')}}"><button style="color: var(--text-bg-inv);">Back to home</button></a>
+{% endblock %}

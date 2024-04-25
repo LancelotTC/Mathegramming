@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>website.auth &mdash; Mathegramming 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Mathegramming
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Mathegramming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../website.html">website</a></li>
+      <li class="breadcrumb-item active">website.auth</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for website.auth</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserSettings</span><span class="p">,</span> <span class="n">Notification</span>
+<span class="kn">from</span> <span class="nn">werkzeug.security</span> <span class="kn">import</span> <span class="n">generate_password_hash</span><span class="p">,</span> <span class="n">check_password_hash</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">login_user</span><span class="p">,</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">logout_user</span><span class="p">,</span> <span class="n">current_user</span>
+<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">write</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm.exc</span> <span class="kn">import</span> <span class="n">UnmappedInstanceError</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s2">&quot;auth&quot;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../website.html#website.auth.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">element_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Shorthand for request.form.get().&quot;&quot;&quot;</span>
+
+	<span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">element_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="login"><a class="viewcode-back" href="../../website.html#website.auth.login">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/sign-in&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">login</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Login view function. Renders the login page (sign_in.html)</span>
+<span class="sd">	and gets all the values of the input elements in the form,</span>
+<span class="sd">	gets the user in DB by username and checks the password. Logs-in the user if</span>
+<span class="sd">	it matches, flash() an error if not. </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1"># data = request.form</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">write</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+
+		<span class="n">email</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+		<span class="n">password</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+		<span class="n">remember_me</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;remember-me&quot;</span><span class="p">)</span>
+
+		<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">check_password_hash</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+				<span class="n">login_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">remember</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="n">remember_me</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span> <span class="k">else</span> <span class="kc">False</span><span class="p">)</span>
+				<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.home&quot;</span><span class="p">))</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;email and password do not match. Please try again&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;email does not exist.&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;signin_page.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="logout"><a class="viewcode-back" href="../../website.html#website.auth.logout">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/logout&quot;</span><span class="p">)</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">logout</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;Logout view function. Logs-out the user from flask-login and redirects the user to the first_page.&quot;&quot;&quot;</span>
+	<span class="n">logout_user</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.home&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="sign_up"><a class="viewcode-back" href="../../website.html#website.auth.sign_up">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/sign-up&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">sign_up</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Sign up view function. Renders the sign-up page (sign_up.html) and</span>
+<span class="sd">	if post request, gets the form elements&#39;s values, checks format of</span>
+<span class="sd">	email address, username and both passwords. If everything checks out,</span>
+<span class="sd">	it creates a new User in database and also a UserSettings row associated</span>
+<span class="sd">	the User.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="c1"># Get values from inputs</span>
+		<span class="n">email</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+		<span class="n">username</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
+		<span class="n">first_name</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;first-name&quot;</span><span class="p">)</span>
+		<span class="n">last_name</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;last-name&quot;</span><span class="p">)</span>
+		<span class="n">password1</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password1&quot;</span><span class="p">)</span>
+		<span class="n">password2</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password2&quot;</span><span class="p">)</span>
+		<span class="n">remember_me</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;remember-me&quot;</span><span class="p">)</span>
+		<span class="n">promotional_emails</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;promotional-emails&quot;</span><span class="p">)</span>
+
+		<span class="n">teacher</span> <span class="o">=</span> <span class="kc">False</span>
+
+		<span class="k">if</span> <span class="n">first_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">teacher</span> <span class="o">=</span> <span class="kc">True</span>
+		
+		<span class="c1"># If it finds a user with the email address that the new user inputted,</span>
+		<span class="c1"># it will tell them that the email already exists. Only 1 account can be</span>
+		<span class="c1"># associated with an email.</span>
+		<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Email already exists&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+		<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Email address is too short&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+		<span class="c1"># The following regex is an expression that matches all emails (source: https://www.tutorialspoint.com/checking-for-valid-email-address-using-regular-expressions-in-java)</span>
+		<span class="k">elif</span> <span class="n">email</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Email address does not meet standards&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+		
+		<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">username</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Username is too short&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+		<span class="k">elif</span> <span class="n">password1</span> <span class="o">!=</span> <span class="n">password2</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Passwords do not match&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+		
+		<span class="c1"># Password requirements: At least 8 characters and contains at least 1 number AND 1 special characters from below.</span>
+		<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">password1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">7</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">chr</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="n">password1</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">chr</span> <span class="ow">in</span> <span class="s2">&quot;@&amp;#?!*%_-&quot;</span> <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="n">password1</span><span class="p">):</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Password should be min. 8 characters long and have at least a number and a special character&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+		
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># Create new user filling in the inputted information</span>
+			<span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span>
+				<span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+				<span class="n">first_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">teacher</span> <span class="k">else</span> <span class="n">first_name</span><span class="p">,</span>
+				<span class="n">last_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">teacher</span> <span class="k">else</span> <span class="n">last_name</span><span class="p">,</span>
+				<span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+				<span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span>
+				<span class="n">password</span><span class="o">=</span><span class="n">generate_password_hash</span><span class="p">(</span><span class="n">password1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span>
+				<span class="n">phone_number</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+				<span class="n">two_FA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+				<span class="n">account_type</span><span class="o">=</span><span class="s2">&quot;student&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">teacher</span> <span class="k">else</span> <span class="s2">&quot;teacher&quot;</span><span class="p">,</span>
+			<span class="p">)</span>
+
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+			<span class="c1"># To make the UserSettings associated with the User,</span>
+			<span class="c1"># it is necessary to get the User&#39;s id (primary key)</span>
+			<span class="c1"># Since SQLAlchemy auto-generates an id in the DB, it is necessary to add and commit</span>
+			<span class="c1"># the new user, so that the id is generated. </span>
+			<span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+			<span class="n">new_settings</span> <span class="o">=</span> <span class="n">UserSettings</span><span class="p">(</span>
+				<span class="n">user_id</span><span class="o">=</span><span class="n">new_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+				<span class="n">security_emails</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+				<span class="n">activity_emails</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+				<span class="n">promotional_emails</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="n">promotional_emails</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span> <span class="k">else</span> <span class="kc">False</span>
+			<span class="p">)</span>
+			<span class="n">write</span><span class="p">(</span><span class="n">promotional_emails</span><span class="p">)</span>
+
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_settings</span><span class="p">)</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+			<span class="n">login_user</span><span class="p">(</span><span class="n">new_user</span><span class="p">,</span> <span class="n">remember</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="n">remember_me</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span> <span class="k">else</span> <span class="kc">False</span><span class="p">)</span>
+			<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.home&quot;</span><span class="p">))</span>
+
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;signup_page.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="delete_account"><a class="viewcode-back" href="../../website.html#website.auth.delete_account">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/account_deletion&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delete_account</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Delete account view function. Renders the delete account page and</span>
+<span class="sd">	checks inputted information. If it matches, it removes the User&#39;s settings,</span>
+<span class="sd">	the users notifications and the account itself from the DB and redirects the user to first_page.html.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+		<span class="n">password</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">check_password_hash</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">UserSettings</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">())</span>
+			
+			<span class="c1"># Since the user might not have any of the things listed after when they delete their account,</span>
+			<span class="c1"># it is possible that the line of code throws an UnmappedInstanceError, hence the try except.</span>
+			<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Appointment</span><span class="p">,</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Post</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">PostReaction</span><span class="p">,</span> <span class="n">CommentReaction</span>
+			<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Notification</span><span class="p">,</span> <span class="n">Appointment</span><span class="p">,</span> <span class="n">Message</span><span class="p">,</span> <span class="n">Post</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">PostReaction</span><span class="p">,</span> <span class="n">CommentReaction</span><span class="p">):</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="n">model</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+				<span class="k">except</span> <span class="n">UnmappedInstanceError</span><span class="p">:</span>
+					<span class="k">continue</span>
+
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+			<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.home&quot;</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Incorrect password&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+	
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;delete_account.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="save_information"><a class="viewcode-back" href="../../website.html#website.auth.save_information">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/save&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">save_information</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	This function saves the account information</span>
+<span class="sd">	that the user might have changed in the account.html page.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1"># email is immutable, the user cannot change it because the input is readonly.</span>
+	<span class="n">email</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+
+	
+	<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+	<span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
+	<span class="n">user</span><span class="o">.</span><span class="n">first_name</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;first-name&quot;</span><span class="p">)</span>
+	<span class="n">user</span><span class="o">.</span><span class="n">last_name</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;last-name&quot;</span><span class="p">)</span>
+	<span class="n">user</span><span class="o">.</span><span class="n">gender</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;gender&quot;</span><span class="p">)</span>
+	<span class="n">user</span><span class="o">.</span><span class="n">birthday</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;birthday&quot;</span><span class="p">)</span>
+	<span class="n">user</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
+	<span class="n">user</span><span class="o">.</span><span class="n">phone_number</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">)</span>
+	<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+	<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;views.account&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="forgot_password"><a class="viewcode-back" href="../../website.html#website.auth.forgot_password">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/forgot_password&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">forgot_password</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Unfinished function. Renders the forget_password.html page.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">data</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+	<span class="k">try</span><span class="p">:</span> 
+		<span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+	<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+		<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Email address doesn&#39;t exist&quot;</span> <span class="p">,</span><span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;forgot_password.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="verify_code"><a class="viewcode-back" href="../../website.html#website.auth.verify_code">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/verify_code&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">verify_code</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Renders the verify_code.html page.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;verify_code.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="reset_password"><a class="viewcode-back" href="../../website.html#website.auth.reset_password">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/reset_password&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">reset_password</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Unfinished function. Similar to auth.change_password (next function).</span>
+<span class="sd">	Renders the reset_password.html page and would let the user change their password</span>
+<span class="sd">	after having verified their identity by sending them an verification code via email.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="c1"># email = get(&quot;email&quot;)</span>
+		<span class="n">password1</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password1&quot;</span><span class="p">)</span>
+		<span class="n">password2</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password2&quot;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">password1</span> <span class="o">!=</span> <span class="n">password2</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Passwords do not match&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+			<span class="n">user</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">generate_password_hash</span><span class="p">(</span><span class="n">password1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span>
+			<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+	
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;reset_password.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="change_password"><a class="viewcode-back" href="../../website.html#website.auth.change_password">[docs]</a><span class="nd">@auth</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/change_password&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">change_password</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Renders the change_password.html page from the account.html page,</span>
+<span class="sd">	which asks for the user&#39;s current password and their new password.</span>
+<span class="sd">	If everything checks out, the old password is replaced by the new one.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+		<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+		<span class="n">password</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">check_password_hash</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+			<span class="n">password1</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password1&quot;</span><span class="p">)</span>
+			<span class="n">password2</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;password2&quot;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">password1</span> <span class="o">!=</span> <span class="n">password2</span><span class="p">:</span>
+				<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;New passwords do not match&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+			
+			<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">password1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">7</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">chr</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="n">password1</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">chr</span> <span class="ow">in</span> <span class="s2">&quot;@&amp;#?!*%_-&quot;</span> <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="n">password1</span><span class="p">):</span>
+				<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Password should be min. 8 characters long and have at least a number and a special character&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">user</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">generate_password_hash</span><span class="p">(</span><span class="n">password1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sha256&quot;</span><span class="p">)</span>
+				<span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+			<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;account.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span>
+
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Incorrect password&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+	
+	<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;change_password.html&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Lancelot Tariot Camille.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

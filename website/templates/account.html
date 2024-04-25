@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+
+{% block title %}Account preferences{% endblock %}
+{% block imports %}
+<link rel="stylesheet" href="../static/styles/account.css">
+{% endblock %}
+
+{% block content %}
+<details class="details">
+	<summary class="summary"><img src="../static/resources/hamburger_icon.png" alt="Show sidebar"></summary>
+	<div class="sidebar">
+		<div style="padding-bottom: 4rem;">
+			<div class="profile-area-sidebar">
+				<div class="profile-picture-sidebar"></div>
+				<h2>
+					{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+						{{current_user.first_name}} {{current_user.last_name}}
+					{% else %}
+						{{current_user.username}}
+					{% endif %}
+				</h2>
+			</div>
+
+			<a href="{{url_for('views.account')}}"><button>Account profile</button></a>
+			<a href="{{url_for('views.activity_information')}}"><button>Acitivity information</button></a>
+			<a href="{{url_for('views.appearance')}}"><button>Appearance</button></a>
+			<a href="{{url_for('views.email_prefs')}}"><button>Email preferences</button></a>
+			<a href="{{url_for('auth.logout')}}"><button>Logout</button></a>
+		</div>
+	</div>
+</details>
+
+<div class="sidebar normal-sidebar">
+	<div style="padding-bottom: 4rem;">
+		<div class="profile-area-sidebar">
+			<div class="profile-picture-sidebar"></div>
+			<h2>
+				{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+					{{current_user.first_name}} {{current_user.last_name}}
+				{% else %}
+					{{current_user.username}}
+				{% endif %}
+			</h2>
+		</div>
+
+		<a href="{{url_for('views.account')}}"><button>Account profile</button></a>
+		<a href="{{url_for('views.activity_information')}}"><button>Acitivity information</button></a>
+		<a href="{{url_for('views.appearance')}}"><button>Appearance</button></a>
+		<a href="{{url_for('views.email_prefs')}}"><button>Email preferences</button></a>
+		<a href="{{url_for('auth.logout')}}"><button>Logout</button></a>
+	</div>
+</div>
+
+<div class="fixed-shadow fixed-shadow-left"></div>
+
+
+
+<form id="main-container" method="POST" action="{{ url_for('auth.save_information') }}">
+	<span class="profile-picture"></span>
+	<div class="inner-container-info">
+		<span class="main-title-container exclude">
+			<h1 class="main-title">
+				{% if current_user.first_name not in ("None", "") and current_user.last_name not in ("None", "") %}
+					{{current_user.first_name}} {{current_user.last_name}}
+				{% else %}
+					{{current_user.username}}
+				{% endif %}
+			</h1>
+		</span>
+	</div>
+
+	<div class="container-div">
+		<p class="label-text">Personal information</p>
+		<span>
+			<label for="username-input">Username</label>
+			<input id="username-input" name="username" type="text" placeholder="Username"
+				value="{{current_user.username}}">
+		</span>
+		<span>
+			<label for="first-name-input">First name</label>
+			<input id="first-name-input" name="first-name" type="text" placeholder="First name"
+				value="{{current_user.first_name}}">
+		</span>
+		<span>
+			<label for="last-name-input">Last name</label>
+			<input id="last-name-input" name="last-name" type="text" placeholder="Last name"
+				value="{{current_user.last_name}}">
+		</span>
+		<span>
+			<label for="birthday-input">Birthday</label>
+			<input id="birthday-input" name="birthday" type="date" value="{{current_user.birthday}}">
+		</span>
+		<span>
+			<label for="gender-input">Gender</label>
+			<span style="float:right;">
+				<select name="gender-input" id="gender-input" name="gender" type="text">
+					<option value="default"></option>
+					<option value="male">Male</option>
+					<option value="female">Female</option>
+					<option value="other">Other</option>
+				</select>
+			</span>
+		</span>
+		<span>
+			<label for="description-label">Talk about yourself</label>
+			<br>
+			<textarea class="description-input" name="description" type="date" placeholder="Description">
+						{% if current_user.description %}
+							{{current_user.description}}
+						{% else %}
+							{{current_user.description}}
+						{% endif %}
+					</textarea>
+		</span>
+	</div>
+	<div class="container-div">
+		<p class="label-text">Security information</p>
+
+		<span>
+			<label>Email</label>
+			<input value="{{current_user.email}}" name="email" class="email-input" readonly/>
+		</span>
+		<span id="account-span">
+			<label>Account type</label>
+			<label>{{ current_user.account_type.capitalize() }}</label>
+		</span>
+		<span id="password-span">
+			<label>Password</label>
+			<label>• • • • • • • •</label>
+			<a href="{{url_for('auth.change_password')}}" id="edit-link"><img src="../static/resources/edit_icon.png"
+					id="edit-icon" alt="Change password"></a>
+		</span>
+		<span>
+			<label for="tel">Phone number</label>
+			<input type="tel" placeholder="Phone number" name="number" value="{{current_user.phone_number}}">
+		</span>
+		<span>
+			<label>2FA</label>
+			<label>
+
+				{{"Enabled" if current_user.twoFA == "True" else "Disabled"}}
+
+			</label>
+		</span>
+		<span>
+			<label for="region">Region</label>
+			<span>
+				<select name="region" id="region">
+					<option value="#">bunch of options</option>
+				</select>
+			</span>
+		</span>
+	</div>
+	<div class="container-save container-div">
+		<p class="label-text">Account management</p>
+		<div style="display: flex; column-gap: 2ch;">
+			<a>
+				<button id="save" type="submit" style="border-color: var(--ac);">Save information</button>
+			</a>
+			<a href="{{url_for('auth.delete_account')}}">
+				<button id="delete" type="button">Delete account</button>
+			</a>
+		</div>
+	</div>
+</form>
+<div class="fixed-shadow fixed-shadow-right"></div>
+
+
+
+
+{% endblock %}

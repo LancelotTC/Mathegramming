@@ -1,0 +1,103 @@
+#outer-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.img {
+	height: 50%;
+}
+
+#container {
+	position: relative;
+	width: 40%;
+	min-width: fit-content;
+	height: 75vh;
+	min-height: fit-content;
+
+	background-color: var(--fg);
+	padding: 3rem;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	text-align: center;
+	align-items: center;
+}
+
+#content {
+	width: 100%;
+	font-size: 1.2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+}
+
+
+#main-title {
+	margin: 0;
+	color: var(--text-bg-inv);
+	font-size: 4rem;
+}
+
+p,
+ul {
+	color: var(--text-bg-inv);
+	text-align: left;
+}
+
+#buttons {
+	display: flex;
+	column-gap: 3rem;
+	width: 100%;
+}
+
+.button {
+	color: var(--text-bg-inv);
+	border: solid var(--bg) .3em;
+	width: 100%;
+}
+
+#buttons a {
+	width: 100%;
+}
+
+.important {
+	color: var(--ac);
+	background-color: var(--bg);
+	border-color: var(--ac);
+}
+
+.important:hover {
+	color: var(--bg);
+	border-color: var(--bg);
+}
+
+#sign-buttons-portrait {
+	column-gap: 1ch;
+	display: none;
+}
+
+@media (max-width: 1266px) {
+	#outer-container {
+		justify-content: center;
+	}
+
+}
+
+@media (orientation: portrait) {
+	#buttons {
+		flex-direction: column;
+		row-gap: 1ch;
+	}
+
+	.sign-buttons-landscape {
+		display: none;
+	}
+
+	#sign-buttons-portrait {
+		display: flex;
+	}
+}

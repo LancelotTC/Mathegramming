@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+
+{% block title %}Contact us{% endblock %}
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="../static/styles/contact_us.css">
+{% endblock %}
+
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {%endblock %}
+
+{% block content %}
+
+<form id="inner-container" method="POST" action="{{url_for('views.contact_us')}}">
+	<h1 id="main-title">Send us a message</h1>
+	<input type="tel" name="phone-number" placeholder="Phone number *" required>
+	<select name="reason" required>
+		<option value="default">Select the reason why you are reaching us</option>
+		<option value="pricing-question">Ask a pricing-related question</option>
+		<option value="website-issue">Report an issue with the website</option>
+		<option value="other">Other</option>
+	</select>
+	<input type="text" name="title" placeholder="Title *" required>
+	<textarea name="message" cols="30" rows="10" placeholder="Message *" required></textarea>
+	<p>By clicking "Send message", you agree to the <a href="#">Privacy</a> and <a href="#">Terms of Service</a>.</p>
+	<button type="submit">Send message</button>
+</form>
+
+{% endblock %}

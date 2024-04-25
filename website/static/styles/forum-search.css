@@ -1,0 +1,10 @@
+#outer-container {
+	flex-direction: column;
+	align-items: center;
+	padding-top: 5%;
+}
+
+#upper-container,
+#main-container {
+	width: 50%;
+}

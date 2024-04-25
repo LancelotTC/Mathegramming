@@ -1,0 +1,19 @@
+#inner-container {
+	row-gap: 2ch;
+}
+
+h1 {
+	margin: 0;
+}
+
+#delete {
+	color: var(--text-bg-inv);
+	border-color: var(--bg);
+}
+
+#delete:hover {
+	color: var(--bg);
+	font-weight: 700;
+	background-color: red;
+	border-color: red;
+}

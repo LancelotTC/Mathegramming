@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="../static/styles/bootstrap_checkbox.css">
+<link rel="stylesheet" type="text/css" href="../static/styles/authentication.css">
+<link rel="stylesheet" type="text/css" href="../static/styles/signup_page.css">
+
+{% endblock %}
+
+{% block nav_bar_item %}
+<a href="{{url_for('auth.login')}}" style="float: right;">Sign in</a>
+{% endblock %}
+
+{% block background %} style="background-image: url('../static/resources/background.jpg');" {%endblock %}
+{% block content %}
+<form class="inner-container" id="inner-container_student" method="POST">
+	<h1>Create a <br> student account</h1>
+
+	<div style="display: flex; column-gap: 1ch; width: 100%">
+		<a href="https://www.google.com">
+			<button>
+				<div class="sign-as">
+					<img src="../static/resources/google_logo.png" alt="" width="27px">
+					Google
+				</div>
+			</button>
+		</a>
+		<a href="https://www.microsoft.com">
+			<button style="height: 100%;">
+				<div class="sign-as">
+					<img src="../static/resources/microsoft_logo.png" alt="" width="22px">
+					Microsoft
+				</div>
+			</button>
+		</a>
+	</div>
+
+
+	<hr class="solid" />
+	<input type="text" placeholder="Email" class="inputs" name="email">
+	<input type="text" placeholder="Username" class="inputs" name="username">
+	<input type="password" placeholder="Password" class="inputs" name="password1">
+	<input type="password" placeholder="Confirm Password" class="inputs" name="password2">
+
+	<div class="form-check" style="display: flex; align-items: center; column-gap: 1rem">
+		<input class="form-check-input" type="checkbox" value="" id="remember-me-student" name="remember-me">
+		<label class="form-check-label" for="remember-me-student" class="remember-me">
+			Remember me
+		</label>
+	</div>
+	<div class="form-check" style="display: flex; align-items: center; column-gap: 1rem">
+		<input class="form-check-input" type="checkbox" value="" id="promotional-emails-student"
+			name="promotional-emails">
+		<label class="form-check-label" for="promotional-emails-student" class="remember-me">
+			Receive promotional emails
+		</label>
+	</div>
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				{% if category == "error" %}
+					<p class="alert">{{ message }}</p>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	<br>
+	<button type="submit" style="color: var(--text-bg-inv);">Create account</button>
+
+</form>
+
+
+<form class="inner-container" id="inner-container_teacher" method="POST">
+	<h1>Create a<br>teacher account</h1>
+
+	<div style="display: flex; column-gap: 1ch; width: 100%">
+		<a href="https://www.google.com">
+			<button>
+				<div class="sign-as">
+					<img src="../static/resources/google_logo.png" alt="" width="27px">
+					Google
+				</div>
+			</button>
+		</a>
+		<a href="https://www.microsoft.com">
+			<button style="height: 100%; padding: 0.5em;">
+				<div class="sign-as">
+					<img src="../static/resources/microsoft_logo.png" alt="" width="22px">
+					Microsoft
+				</div>
+			</button>
+		</a>
+	</div>
+
+	<hr class="solid" />
+	<input type="text" placeholder="Email" class="inputs" name="email">
+	<input type="text" placeholder="Username" class="inputs" name="username">
+	<input type="text" placeholder="First name" class="inputs" name="first-name">
+	<input type="text" placeholder="Last name" class="inputs" name="last-name">
+	<input type="password" placeholder="Password" class="inputs" name="password1">
+	<input type="password" placeholder="Confirm Password" class="inputs" name="password2">
+
+	<div class="form-check" style="display: flex; align-items: center; column-gap: 1rem">
+		<input class="form-check-input" type="checkbox" value="" id="remember-me-teacher" class="remember-me"
+			name="remember-me">
+		<label class="form-check-label" for="remember-me-teacher">
+			Remember me
+		</label>
+	</div>
+	<div class="form-check" style="display: flex; align-items: center; column-gap: 1rem">
+		<input class="form-check-input" type="checkbox" value="" id="promotional-emails-teacher"
+			name="promotional-emails">
+		<label class="form-check-label" for="promotional-emails-teacher">
+			Receive promotional emails
+		</label>
+	</div>
+
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				{% if category == "error" %}
+					<p class="alert">{{ message }}</p>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	<br>
+	<button type="submit" style="color: var(--text-bg-inv);">Create account</button>
+
+</form>
+
+
+{% endblock %}
